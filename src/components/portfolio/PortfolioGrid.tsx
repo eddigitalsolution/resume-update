@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { Search, ExternalLink, Code2 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Project } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -23,7 +24,7 @@ export function PortfolioGrid({ initialProjects }: { initialProjects: Project[] 
     ))
   ];
 
-   const filteredProjects = initialProjects.filter(p => {
+  const filteredProjects = initialProjects.filter(p => {
     const matchesType = p.type === activeType;
     const matchesCategory = activeCategory === "All" || p.category === activeCategory;
     const matchesSearch = p.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -120,12 +121,14 @@ export function PortfolioGrid({ initialProjects }: { initialProjects: Project[] 
             key={project.id}
             className="group relative rounded-3xl overflow-hidden bg-white/5 border border-white/10 hover:border-white/20 transition-all flex flex-col"
           >
-            <Link href={`/project/${project.id}`} className="block overflow-hidden aspect-video bg-gray-800">
+            <Link href={`/project/${project.id}`} className="block overflow-hidden aspect-video bg-gray-800 relative">
               {project.image_url ? (
-                <img 
+                <Image 
                   src={project.image_url} 
                   alt={project.title} 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105" 
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-700">

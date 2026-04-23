@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Layers, Code2 } from "lucide-react";
+import Image from "next/image";
 import { Project } from "@/types";
 
 export function ProjectDetailClient({ project }: { project: Project }) {
@@ -25,10 +26,13 @@ export function ProjectDetailClient({ project }: { project: Project }) {
 
       <div className="relative aspect-video rounded-3xl overflow-hidden border border-white/10 mb-12 bg-gray-900">
         {project.image_url ? (
-          <img 
+          <Image 
             src={project.image_url} 
             alt={project.title} 
-            className="w-full h-full object-cover"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-800">

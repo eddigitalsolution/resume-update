@@ -2,6 +2,7 @@ import { Hero } from "@/components/Hero";
 import { ImpactBar } from "@/components/portfolio/ImpactBar";
 import { createClient } from "@/lib/supabase-server";
 import Link from "next/link";
+import Image from "next/image";
 import { Code2, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -74,7 +75,7 @@ export default async function Home() {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {freelanceProjects?.map((project) => (
+          {freelanceProjects?.map((project, idx) => (
             <Link
               href={`/project/${project.id}`}
               key={project.id}
@@ -82,7 +83,14 @@ export default async function Home() {
             >
               <div className="aspect-video bg-gray-800 overflow-hidden relative">
                 {project.image_url ? (
-                  <img src={project.image_url} alt={project.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <Image 
+                    src={project.image_url} 
+                    alt={project.title} 
+                    fill
+                    priority={idx < 2}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110" 
+                  />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-gray-700"><Code2 size={48} /></div>
                 )}
@@ -132,7 +140,13 @@ export default async function Home() {
             >
               <div className="aspect-video bg-gray-800 overflow-hidden relative">
                 {project.image_url ? (
-                  <img src={project.image_url} alt={project.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <Image 
+                    src={project.image_url} 
+                    alt={project.title} 
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110" 
+                  />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-gray-700"><Code2 size={48} /></div>
                 )}
