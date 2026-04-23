@@ -70,6 +70,9 @@ export default function MetricsPage() {
 
     if (error) {
       console.error("Error saving metrics:", error.message);
+      alert("Failed to save metrics: " + error.message);
+    } else {
+      alert("Metrics updated successfully!");
     }
     setSaving(false);
   };
