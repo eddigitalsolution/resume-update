@@ -61,6 +61,4 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) to view.
 Admin Access: [http://localhost:3000/login](http://localhost:3000/login)
 
-## 📄 License
 
-This project is licensed under the MIT License.
