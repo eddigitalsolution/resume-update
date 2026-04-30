@@ -1,7 +1,7 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -62,20 +62,27 @@ export async function proxy(request: NextRequest) {
     // Session is invalid or refresh token is missing - ignore noisy logs
   }
 
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const isAdminEmail = user?.email === adminEmail;
+  const hasAdminRole = user?.user_metadata?.role === 'admin';
+  const isAdmin = hasAdminRole || isAdminEmail;
+
   // Protect admin routes
   if (request.nextUrl.pathname.startsWith('/admin')) {
-    const adminEmail = process.env.ADMIN_EMAIL;
-    const isAdminEmail = user?.email === adminEmail;
-    const hasAdminRole = user?.user_metadata?.role === 'admin';
-    
-    if (!user || (!hasAdminRole && !isAdminEmail)) {
+    if (!user || !isAdmin) {
       return NextResponse.redirect(new URL('/login', request.url))
     }
   }
 
   // Redirect from login if already logged in
   if (request.nextUrl.pathname === '/login' && user) {
-    return NextResponse.redirect(new URL('/admin/dashboard', request.url))
+    if (isAdmin) {
+      return NextResponse.redirect(new URL('/admin/dashboard', request.url))
+    } else {
+      // Prevent redirect loop for non-admin users by sending them home
+      // instead of back to /admin/dashboard which would reject them.
+      return NextResponse.redirect(new URL('/', request.url))
+    }
   }
 
   return response
