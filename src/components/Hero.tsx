@@ -18,7 +18,14 @@ export function Hero({ profile }: { profile: HeroProfile }) {
       <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[160px] animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[160px] animate-pulse delay-700" />
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:radial-gradient(white,transparent_85%)] opacity-20" />
+        {/* High-tech CSS Grid Pattern */}
+        <div 
+          className="absolute inset-0 opacity-10 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_90%)]"
+          style={{ 
+            backgroundImage: `linear-gradient(to right, #888 1px, transparent 1px), linear-gradient(to bottom, #888 1px, transparent 1px)`,
+            backgroundSize: '40px 40px'
+          }}
+        />
       </div>
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
