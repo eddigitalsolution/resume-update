@@ -20,7 +20,7 @@ export function Hero({ profile }: { profile: HeroProfile }) {
         <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[160px] animate-pulse delay-700" />
         {/* High-tech CSS Grid Pattern */}
         <div 
-          className="absolute inset-0 opacity-10 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_90%)]"
+          className="absolute inset-0 opacity-10 mask-[radial-gradient(ellipse_at_center,black_30%,transparent_90%)]"
           style={{ 
             backgroundImage: `linear-gradient(to right, #888 1px, transparent 1px), linear-gradient(to bottom, #888 1px, transparent 1px)`,
             backgroundSize: '40px 40px'
