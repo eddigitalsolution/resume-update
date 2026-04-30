@@ -54,9 +54,13 @@ export async function proxy(request: NextRequest) {
     }
   )
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  let user = null;
+  try {
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
+  } catch (err) {
+    // Session is invalid or refresh token is missing - ignore noisy logs
+  }
 
   // Protect admin routes
   if (request.nextUrl.pathname.startsWith('/admin')) {

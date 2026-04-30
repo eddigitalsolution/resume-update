@@ -174,16 +174,16 @@ function ResumeBuilderContent() {
   if (!data) return <div className="text-white">No resume found. Seed the database first.</div>;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-9rem)] overflow-x-hidden">
-      <div className="flex items-center justify-between mb-8 shrink-0">
+    <div className="flex flex-col h-auto lg:h-[calc(100vh-9rem)] overflow-x-hidden">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 shrink-0 gap-6">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">ATS Resume Builder</h1>
-          <p className="text-gray-400 text-sm">Create a professional, ATS-optimized resume.</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-white mb-1 md:mb-2">ATS Resume Builder</h1>
+          <p className="text-gray-400 text-xs md:text-sm">Create a professional, ATS-optimized resume.</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
           <Button 
             variant="outline" 
-            className="rounded-xl border-white/10 hover:bg-white/5 font-bold"
+            className="w-full sm:w-auto rounded-xl border-white/10 hover:bg-white/5 font-bold h-12"
             onClick={handleSave}
             disabled={saving}
           >
@@ -193,16 +193,16 @@ function ResumeBuilderContent() {
           <Link
             href="/resume/print"
             target="_blank"
-            className="inline-flex items-center justify-center rounded-xl bg-white text-black hover:bg-gray-200 font-bold px-6 py-2 transition-colors"
+            className="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-white text-black hover:bg-gray-200 font-bold px-6 h-12 transition-colors"
           >
             <Printer size={18} className="mr-2" /> Download PDF
           </Link>
         </div>
       </div>
 
-      <div className="flex-1 flex gap-8 min-h-0">
+      <div className="flex-1 flex flex-col lg:flex-row gap-8 min-h-0">
         {/* Left: Editor Form */}
-        <div className="w-1/2 overflow-y-auto pr-4 space-y-8 pb-10 min-w-0">
+        <div className="w-full lg:w-1/2 lg:overflow-y-auto lg:pr-4 space-y-8 pb-10 min-w-0">
           <div 
             ref={scrollRef}
             className="bg-white/5 border border-white/10 rounded-2xl sticky top-0 z-10 backdrop-blur-md overflow-hidden group cursor-grab active:cursor-grabbing"
@@ -242,7 +242,7 @@ function ResumeBuilderContent() {
           <div className="space-y-6">
             {activeTab === 'info' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-                 <div className="grid grid-cols-2 gap-4">
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">Full Name</label>
                        <input 
@@ -260,7 +260,7 @@ function ResumeBuilderContent() {
                       />
                     </div>
                  </div>
-                 <div className="grid grid-cols-2 gap-4">
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">Email</label>
                        <input 
@@ -305,7 +305,7 @@ function ResumeBuilderContent() {
                     >
                       <Trash2 size={16} />
                     </button>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest pl-1">Company</label>
                         <input 
@@ -564,7 +564,7 @@ function ResumeBuilderContent() {
                           }}
                         />
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">Degree</label>
                           <input 
@@ -610,7 +610,7 @@ function ResumeBuilderContent() {
         </div>
 
         {/* Right: Live Preview */}
-        <div className="w-1/2 flex flex-col min-h-0 relative">
+        <div className="w-full lg:w-1/2 flex flex-col min-h-0 relative">
            <div className="flex items-center gap-2 mb-4 px-2">
              <Layout size={16} className="text-indigo-400" />
              <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">ATS Preview</span>

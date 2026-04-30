@@ -13,54 +13,73 @@ export function Hero({ profile }: { profile: HeroProfile }) {
   const config = profile?.homepage_config || {};
 
   return (
-    <div className="relative overflow-hidden pt-20 pb-16 lg:pt-32 lg:pb-24">
-      {/* Background Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 overflow-hidden">
-        <div className="absolute top-[-10%] left-[-15%] w-[50%] h-[50%] rounded-full bg-blue-500/10 blur-[130px] opacity-60" />
-        <div className="absolute bottom-[10%] right-[-15%] w-[50%] h-[50%] rounded-full bg-purple-500/10 blur-[130px] opacity-60" />
+    <div className="relative min-h-[70vh] flex items-center justify-center pt-8 pb-16 lg:pt-12 lg:pb-24 overflow-visible">
+      {/* Immersive Background System */}
+      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[160px] animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[160px] animate-pulse delay-700" />
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:radial-gradient(white,transparent_85%)] opacity-20" />
       </div>
 
-      <div className="container mx-auto px-4 lg:px-8 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-indigo-400 mb-8">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-            </span>
-            {config.hero_availability || "Available for Strategic Scale"}
-          </span>
-
-          <h1 className="text-5xl lg:text-8xl font-bold tracking-tight mb-8 bg-clip-text text-transparent bg-linear-to-b from-white to-white/60 leading-[1.1]">
-            <span className="text-blue-500/80">{config.hero_headline_part1 || "Scale Your Business."}</span> <br />
-            <span className="text-purple-500/80">{config.hero_headline_part2 || "Innovate Your Tech."}</span>
-          </h1>
-
-          <p className="max-w-xl mx-auto text-lg text-gray-400 mb-12 leading-relaxed">
-            I am <span className="text-white font-bold">{name}</span>. {summary}
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <Link
-              href="/portfolio?type=Freelance"
-              className="group relative inline-flex h-14 items-center justify-center rounded-2xl bg-blue-600 px-8 text-sm font-bold text-white transition-all hover:bg-blue-500 hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(37,99,235,0.3)]"
+      <div className="container mx-auto px-4 lg:px-8 relative z-10">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col items-center text-center"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-panel text-[11px] font-bold uppercase tracking-[0.2em] text-indigo-400 mb-10 glow-border"
             >
-              {config.hero_cta_primary || "Scale My Growth"}
-              <Zap className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link
-              href="/portfolio?type=Portfolio"
-              className="group relative inline-flex h-14 items-center justify-center rounded-2xl bg-white/10 border border-white/10 px-8 text-sm font-bold text-white transition-all hover:bg-white/20 hover:scale-105 active:scale-95 hover:border-purple-500/50"
-            >
-              {config.hero_cta_secondary || "Explore My Tech"}
-              <Code className="ml-2 h-4 w-4 text-purple-400 transition-transform group-hover:translate-x-1" />
-            </Link>
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+              </span>
+              {config.hero_availability || "Available for Strategic Scale"}
+            </motion.div>
 
-          </div>
-        </motion.div>
+            <h1 className="text-4xl md:text-7xl lg:text-9xl font-black tracking-tight mb-8 md:mb-10 leading-none md:leading-[0.9] text-gradient-primary">
+              <span className="block mb-2">{config.hero_headline_part1 || "Scale Your Business."}</span>
+              <span className="block text-gradient-accent">{config.hero_headline_part2 || "Innovate Your Tech."}</span>
+            </h1>
+
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="max-w-2xl mx-auto text-base md:text-xl text-gray-400 mb-10 md:mb-14 leading-relaxed font-medium px-4"
+            >
+              I am <span className="text-white font-bold border-b-2 border-indigo-500/50">{name}</span>. {summary}
+            </motion.p>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-8"
+            >
+              <Link
+                href="/portfolio?type=Freelance"
+                className="group relative inline-flex h-16 items-center justify-center rounded-2xl bg-white text-black px-10 text-sm font-black transition-all hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(255,255,255,0.1)]"
+              >
+                {config.hero_cta_primary || "Scale My Growth"}
+                <Zap className="ml-3 h-4 w-4 fill-black transition-transform group-hover:rotate-12" />
+              </Link>
+              
+              <Link
+                href="/portfolio?type=Portfolio"
+                className="group relative inline-flex h-16 items-center justify-center rounded-2xl glass-panel px-10 text-sm font-black text-white transition-all hover:scale-105 active:scale-95 glow-border"
+              >
+                {config.hero_cta_secondary || "Explore My Tech"}
+                <Code className="ml-3 h-4 w-4 text-purple-400 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </motion.div>
+          </motion.div>
+        </div>
       </div>
     </div>
   );

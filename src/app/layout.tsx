@@ -82,13 +82,7 @@ export default async function RootLayout({
       className={`${outfit.variable} ${inter.variable} dark h-full antialiased`}
     >
       <body className="font-sans min-h-full flex flex-col bg-black text-gray-100">
-        <Navbar siteName={siteName} logoInitial={logoInitial} />
-        <main className="flex-1">
-          {children}
-        </main>
-        <footer className="border-t border-white/5 py-8 text-center text-sm text-gray-500">
-          <p>&copy; {new Date().getFullYear()} {siteName}. All rights reserved.</p>
-        </footer>
+        {children}
       </body>
     </html>
   );

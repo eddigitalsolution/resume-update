@@ -86,20 +86,20 @@ export default function BrandingPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-20">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div className="flex items-center gap-4">
-          <Link href="/admin/dashboard">
+          <Link href="/admin/dashboard" className="shrink-0">
             <Button variant="ghost" size="icon" className="rounded-full text-gray-400 hover:text-white">
               <ArrowLeft size={20} />
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Homepage Branding</h1>
-            <p className="text-gray-400 text-sm">Manage your site's core narrative, headlines, and availability.</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-white mb-1 md:mb-2">Homepage Branding</h1>
+            <p className="text-gray-400 text-xs md:text-sm">Manage your site's core narrative and headlines.</p>
           </div>
         </div>
         <Button 
-          className="rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold px-8"
+          className="w-full sm:w-auto rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold px-8 py-6 sm:py-2"
           onClick={handleSave}
           disabled={saving}
         >
@@ -110,7 +110,7 @@ export default function BrandingPage() {
 
       <div className="space-y-8">
         {/* Hero Section */}
-        <div className="p-8 rounded-[32px] bg-zinc-900/50 border border-white/10 space-y-6">
+        <div className="p-6 md:p-8 rounded-[32px] bg-zinc-900/50 border border-white/10 space-y-6">
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400">
               <Zap size={20} />
@@ -118,8 +118,8 @@ export default function BrandingPage() {
             <h3 className="text-sm font-bold text-white uppercase tracking-widest">Hero Configuration</h3>
           </div>
           
-          <div className="grid grid-cols-2 gap-6">
-             <div className="space-y-2 col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+             <div className="space-y-2 md:col-span-2">
                 <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest pl-1">Headline Part 1 (Primary Impact)</label>
                 <input 
                   placeholder="e.g. Scale Your Business."
@@ -128,7 +128,7 @@ export default function BrandingPage() {
                   onChange={(e) => updateConfig('hero_headline_part1', e.target.value)}
                 />
              </div>
-             <div className="space-y-2 col-span-2">
+             <div className="space-y-2 md:col-span-2">
                 <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest pl-1">Headline Part 2 (Technical Innovation)</label>
                 <input 
                   placeholder="e.g. Innovate Your Tech."
@@ -228,7 +228,7 @@ export default function BrandingPage() {
         {/* SEO & Global Branding */}
         <div className="p-8 rounded-[32px] bg-zinc-900/50 border border-white/10 space-y-6">
           <h3 className="text-sm font-bold text-indigo-400 uppercase tracking-widest border-b border-white/5 pb-4">SEO & Global Identity</h3>
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
              <div className="space-y-2">
                 <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest pl-1">Site SEO Title</label>
                 <input 
@@ -245,7 +245,7 @@ export default function BrandingPage() {
                   onChange={(e) => updateConfig('site_name', e.target.value)}
                 />
              </div>
-             <div className="space-y-2 col-span-2">
+             <div className="space-y-2 md:col-span-2">
                 <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest pl-1">Global Meta Description</label>
                 <textarea 
                   value={data.homepage_config?.seo_description || ""}

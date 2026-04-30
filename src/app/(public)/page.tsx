@@ -58,18 +58,18 @@ export default async function Home() {
       
       {/* Freelance Projects Section */}
       <section className="container mx-auto px-4 lg:px-8">
-        <div className="flex items-end justify-between mb-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div>
             <div className="flex items-center gap-2 mb-2">
                <div className="h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
                <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest">{config.freelance_label || "Client Success"}</span>
             </div>
-            <h2 className="text-4xl font-bold text-white mb-3">{config.freelance_title || "Freelance Evolution"}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">{config.freelance_title || "Freelance Evolution"}</h2>
             <p className="text-gray-400 max-w-xl">
                {config.freelance_description || "Impactful solutions delivered for businesses and clients across marketing, SEO, and system audits."}
             </p>
           </div>
-          <Link href="/portfolio?type=Freelance" className="text-sm font-bold text-blue-400 hover:text-blue-300 transition-all flex items-center gap-2 group">
+          <Link href="/portfolio?type=Freelance" className="text-sm font-bold text-blue-400 hover:text-blue-300 transition-all flex items-center gap-2 group w-fit">
             All Projects <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
           </Link>
         </div>
@@ -115,18 +115,18 @@ export default async function Home() {
 
       {/* Portfolio Innovations Section */}
       <section className="container mx-auto px-4 lg:px-8">
-        <div className="flex items-end justify-between mb-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div>
             <div className="flex items-center gap-2 mb-2">
                <div className="h-2 w-2 rounded-full bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.5)]" />
                <span className="text-[10px] font-bold text-purple-500 uppercase tracking-widest">{config.portfolio_label || "Engineering & AI"}</span>
             </div>
-            <h2 className="text-4xl font-bold text-white mb-3">{config.portfolio_title || "Portfolio Innovations"}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">{config.portfolio_title || "Portfolio Innovations"}</h2>
             <p className="text-gray-400 max-w-xl">
                {config.portfolio_description || "Technical deep-dives into application architecture, AI creative experiments, and internal systems."}
             </p>
           </div>
-          <Link href="/portfolio?type=Portfolio" className="text-sm font-bold text-purple-400 hover:text-purple-300 transition-all flex items-center gap-2 group">
+          <Link href="/portfolio?type=Portfolio" className="text-sm font-bold text-purple-400 hover:text-purple-300 transition-all flex items-center gap-2 group w-fit">
             Technical Lab <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
           </Link>
         </div>

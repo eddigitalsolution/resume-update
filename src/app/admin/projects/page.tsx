@@ -161,29 +161,29 @@ export default function AdminProjectsPage() {
 
   return (
     <div className="space-y-8 pb-20">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-bold text-white mb-2">{focusMode === 'Freelance' ? "Freelance Projects" : "Skill Portfolio"}</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">{focusMode === 'Freelance' ? "Freelance Projects" : "Skill Portfolio"}</h1>
           <p className="text-gray-400 text-sm">
             {focusMode === 'Freelance' 
               ? "Manage your freelance jobs, contracts, and client deliverables." 
               : "Showcase your tech stack through apps, systems, and creative AI."}
           </p>
         </div>
-        <div className="flex gap-3">
-          <div className="relative group">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative group w-full sm:w-64">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 group-focus-within:text-white transition-colors" />
             <input 
               type="text" 
               placeholder="Search by title or tech..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-zinc-900 border border-white/10 rounded-2xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-indigo-500 transition-all w-64 text-white" 
+              className="bg-zinc-900 border border-white/10 rounded-2xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-indigo-500 transition-all w-full text-white" 
             />
           </div>
           <Button 
             onClick={() => handleOpenModal()}
-            className="rounded-2xl bg-white text-black hover:bg-gray-200 font-bold px-8 h-12 shadow-lg shadow-white/5"
+            className="rounded-2xl bg-white text-black hover:bg-gray-200 font-bold px-8 h-12 shadow-lg shadow-white/5 w-full sm:w-auto"
           >
             <Plus size={20} className="mr-2" /> Launch New
           </Button>
@@ -209,7 +209,7 @@ export default function AdminProjectsPage() {
            </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
           {filteredProjects.map((project) => (
             <motion.div
               layout

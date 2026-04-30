@@ -175,7 +175,7 @@ export default function AdminLayout({
         transition={{ type: "spring", damping: 25, stiffness: 200 }}
         className="flex-1 min-w-0"
       >
-        <header className="h-16 border-b border-white/10 flex items-center justify-between px-4 md:px-8 bg-black/50 backdrop-blur-md sticky top-0 z-30">
+        <header className="h-14 border-b border-white/10 flex items-center justify-between px-4 md:px-8 bg-black/50 backdrop-blur-md sticky top-0 z-30">
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setIsOpen(!isOpen)}
@@ -193,7 +193,7 @@ export default function AdminLayout({
             </div>
           </div>
         </header>
-        <div className="p-4 md:p-8">
+        <div className="p-4 md:p-6 lg:p-8">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}

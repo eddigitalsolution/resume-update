@@ -23,43 +23,45 @@ export function Navbar({ siteName = "Portfolio", logoInitial = "P" }: { siteName
   }
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-white/10 bg-black/50 backdrop-blur-md">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
-        <Link href="/" id="nav-logo" className="flex items-center gap-2 group">
-          <div className="h-8 w-8 rounded-lg bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-white shadow-lg group-hover:scale-110 transition-transform">
+    <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl">
+      <div className="glass-panel rounded-full px-6 py-3 flex items-center justify-between shadow-2xl glow-border">
+        <Link href="/" id="nav-logo" className="flex items-center gap-3 group">
+          <div className="h-10 w-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-black text-white shadow-lg group-hover:rotate-6 transition-all duration-500">
             {logoInitial}
           </div>
-          <span className="text-xl font-bold tracking-tight text-white hidden sm:block">{siteName}</span>
+          <span className="text-xl font-black tracking-tighter text-white hidden sm:block uppercase">{siteName}</span>
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-1">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               id={`nav-link-${item.name.toLowerCase()}`}
               className={cn(
-                "relative px-3 py-2 text-sm font-medium transition-colors hover:text-white",
+                "relative px-5 py-2.5 text-[11px] font-black uppercase tracking-widest transition-all hover:text-white",
                 pathname === item.href ? "text-white" : "text-gray-400"
               )}
             >
               {pathname === item.href && (
                 <motion.div
                   layoutId="navbar-highlight"
-                  className="absolute inset-0 z-[-1] rounded-md bg-white/5"
+                  className="absolute inset-0 z-[-1] rounded-full bg-white/10"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
               {item.name}
             </Link>
           ))}
+          <div className="w-px h-4 bg-white/10 mx-4" />
           <Link
             href="/login"
             id="nav-link-admin"
-            className="ml-4 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black transition-transform hover:scale-105 active:scale-95"
+            className="flex items-center gap-2 rounded-full bg-white px-6 py-2.5 text-[11px] font-black uppercase tracking-widest text-black transition-all hover:bg-gray-200 hover:scale-105 active:scale-95 shadow-xl shadow-white/5"
           >
-            Admin
+            Admin 
+            <div className="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse" />
           </Link>
         </div>
 

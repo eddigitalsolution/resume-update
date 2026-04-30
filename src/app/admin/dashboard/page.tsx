@@ -53,15 +53,15 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="space-y-12">
-      <div className="flex items-end justify-between">
+    <div className="space-y-6 md:space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Welcome Back</h1>
           <p className="text-gray-400 text-sm">Your portfolio is live and synchronized with the cloud.</p>
         </div>
         <div className="flex gap-4">
-           <Link href="/admin/projects">
-             <Button className="rounded-xl bg-white text-black hover:bg-gray-200 font-bold">
+           <Link href="/admin/projects" className="w-full sm:w-auto">
+             <Button className="w-full sm:w-auto rounded-xl bg-white text-black hover:bg-gray-200 font-bold px-6 py-6 sm:py-2">
                <Plus size={18} className="mr-2" /> New Project
              </Button>
            </Link>
@@ -69,7 +69,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {stats.map((stat, i) => (
           <Link href={stat.href} key={stat.name}>
             <motion.div
@@ -110,9 +110,9 @@ export default function AdminDashboardPage() {
 
       {/* Recent Activity Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-4 md:space-y-6">
           <h2 className="text-xl font-bold text-white px-2">Portfolio Overview</h2>
-          <div className="p-10 rounded-[40px] bg-zinc-900/50 border border-white/10 min-h-[300px] flex items-center justify-center text-gray-500">
+          <div className="p-8 rounded-[40px] bg-zinc-900/50 border border-white/10 min-h-[200px] flex items-center justify-center text-gray-500">
             <div className="text-center max-w-sm">
               <div className="h-16 w-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-6">
                  <Activity size={32} className="opacity-20" />
