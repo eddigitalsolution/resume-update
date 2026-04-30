@@ -24,6 +24,11 @@ export interface Skill {
   level: number;
 }
 
+export interface SkillCategory {
+  title: string;
+  skills: Skill[];
+}
+
 export interface Update {
   id: string;
   project_id: string;
@@ -47,7 +52,7 @@ export interface Education {
 
 export interface ResumeData {
   id: string;
-  fullName: string;
+  full_name: string;
   role: string;
   email: string;
   phone: string;

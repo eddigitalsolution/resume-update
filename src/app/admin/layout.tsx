@@ -16,7 +16,9 @@ import {
   X,
   UserCircle,
   Zap,
-  BarChart3
+  BarChart3,
+  FolderKanban,
+  History
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -28,9 +30,9 @@ const adminNavItems = [
   { name: "Branding", href: "/admin/branding", icon: Zap },
   { name: "Metrics", href: "/admin/metrics", icon: BarChart3 },
   { name: "Projects", href: "/admin/projects?type=Freelance", icon: Briefcase },
-  { name: "Portfolio", href: "/admin/projects?type=Portfolio", icon: LayoutDashboard },
+  { name: "Portfolio", href: "/admin/projects?type=Portfolio", icon: FolderKanban },
   { name: "Skills", href: "/admin/skills", icon: Wrench },
-  { name: "Experience", href: "/admin/experience", icon: Briefcase },
+  { name: "Experience", href: "/admin/experience", icon: History },
   { name: "Education", href: "/admin/education", icon: GraduationCap },
   { name: "Resume", href: "/admin/resume", icon: FileText },
 ];

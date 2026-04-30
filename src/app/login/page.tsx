@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { 
-  LogIn, 
   Mail, 
   Lock, 
   Loader2, 
@@ -14,7 +13,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase-browser";
-import { cn } from "@/lib/utils";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -30,24 +28,18 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+      const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (signInError) throw signInError;
 
-      // Check if user is admin
-      if (data.user?.user_metadata?.role !== 'admin') {
-         // Even if logged in, if not admin, we might want to restrict access
-         // However, standard login should at least allow entry if user exists
-         // The middleware handles the actual route protection
-      }
-
       router.push("/admin/dashboard");
       router.refresh();
-    } catch (err: any) {
-      setError(err.message || "Invalid login credentials. Please try again.");
+    } catch (err) {
+      const error = err as Error;
+      setError(error.message || "Invalid login credentials. Please try again.");
       setLoading(false);
     }
   };

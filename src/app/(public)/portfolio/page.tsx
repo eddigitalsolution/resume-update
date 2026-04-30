@@ -9,6 +9,7 @@ export default async function PortfolioPage() {
   const { data: projects } = await supabase
     .from("projects")
     .select("*")
+    .in("status", ["Live", "Past Job"])
     .order("created_at", { ascending: false });
 
   const { data: profile } = await supabase

@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase-server";
 import { notFound } from "next/navigation";
 import { PrintResumeClient } from "../../../components/portfolio/PrintResumeClient";
+import type { ResumeData, Project } from "@/types";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -13,7 +14,7 @@ export default async function PrintResumePage() {
     .select("*")
     .order('id', { ascending: true })
     .limit(1)
-    .maybeSingle();
+    .maybeSingle() as { data: ResumeData | null };
 
   if (!resume) {
     notFound();
@@ -21,21 +22,21 @@ export default async function PrintResumePage() {
 
   // Filter out legacy object data from the projects array, ensuring only valid UUID strings are queried
   const validProjectIds = (resume.projects || []).filter(
-    (item: any): item is string => typeof item === 'string'
+    (item: string | unknown): item is string => typeof item === 'string'
   );
 
-  let projects: any[] = [];
+  let projects: Project[] = [];
   if (validProjectIds.length > 0) {
     const { data: fetchedProjects } = await supabase
       .from("projects")
       .select("*")
-      .in("id", validProjectIds);
+      .in("id", validProjectIds) as { data: Project[] | null };
     
     // Explicitly sort the fetched projects to match the exact order they were selected/saved
     if (fetchedProjects) {
        projects = validProjectIds
-         .map((id: string) => fetchedProjects.find((p: any) => p.id === id))
-         .filter(Boolean); // Remove any nulls if a project was deleted from the master list
+         .map((id: string) => fetchedProjects.find((p: Project) => p.id === id))
+         .filter((p): p is Project => !!p); // Remove any nulls if a project was deleted from the master list
     }
   }
 

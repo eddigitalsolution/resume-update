@@ -25,7 +25,7 @@ async function seed() {
       {
         full_name: 'Idham Yazim',
         role: 'Senior Executive / Performance Digital Marketing',
-        email: 'idhamyazim1234@yahoo.com',
+        email: 'admin@yourdomain.com',
         phone: '010-958-2051',
         location: 'Shah Alam, Selangor',
         summary: 'Dynamic digital marketer adept at crafting and implementing innovative strategies for brand growth. Proficient in SEO, social media, email marketing, and PPC. Skilled in data analysis and ROI optimization. Seeking Digital Marketing Executive role to drive impactful campaigns and contribute to team success with creativity and expertise.',

@@ -6,7 +6,8 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env.local') })
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-const adminEmail = 'idhamyazim1234@yahoo.com'
+// Replace with your actual admin email or use process.env.ADMIN_EMAIL
+const adminEmail = 'admin@yourdomain.com'
 const newPassword = 'Admin1234!'
 
 const supabase = createClient(supabaseUrl!, supabaseKey!)
@@ -26,7 +27,7 @@ async function resetPassword() {
   if (!user) {
     console.log('User not found. Creating anew...')
     const { error: createError } = await supabase.auth.admin.createUser({
-      email: adminEmail,
+      email: adminEmail!,
       password: newPassword,
       email_confirm: true,
       user_metadata: { role: 'admin' }

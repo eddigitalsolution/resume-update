@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Plus, 
@@ -10,7 +10,6 @@ import {
   X, 
   Loader2, 
   Code2, 
-  CheckCircle2,
   Filter
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -33,13 +32,9 @@ export default function SkillsAdminPage() {
   const [saving, setSaving] = useState(false);
   const supabase = createClient();
 
-  useEffect(() => {
-    fetchSkills();
-  }, []);
-
-  async function fetchSkills() {
+  const fetchSkills = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('skills')
       .select('*')
       .order('category', { ascending: true })
@@ -47,7 +42,11 @@ export default function SkillsAdminPage() {
 
     if (data) setSkills(data);
     setLoading(false);
-  }
+  }, [supabase]);
+
+  useEffect(() => {
+    fetchSkills();
+  }, [fetchSkills]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,8 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
+import type { ResumeData, Project, Experience, Education } from "@/types";
 
-export function PrintResumeClient({ data }: { data: any }) {
+interface PrintData extends Omit<ResumeData, 'id'> {
+  featured_projects?: Project[];
+}
+
+export function PrintResumeClient({ data }: { data: PrintData }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       window.print();
@@ -12,7 +17,7 @@ export function PrintResumeClient({ data }: { data: any }) {
 
   return (
     <div className="bg-white text-black w-full overflow-visible relative">
-      <style jsx global>{`
+      <style>{`
         @media print {
           @page {
             size: A4;
@@ -93,7 +98,7 @@ export function PrintResumeClient({ data }: { data: any }) {
           <section>
             <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-4 py-1 tracking-wider font-sans">Work Experience</h2>
             <div className="space-y-6">
-              {data.experience?.map((exp: any, i: number) => (
+              {data.experience?.map((exp: Experience, i: number) => (
                 <div key={i} className="experience-item">
                   <div className="flex justify-between items-baseline mb-1">
                     <h3 className="text-[11pt] font-bold">{exp.company}</h3>
@@ -122,7 +127,7 @@ export function PrintResumeClient({ data }: { data: any }) {
             ];
 
             return sections.map((section) => {
-              const sectionProjects = projects.filter((p: any) => {
+              const sectionProjects = projects.filter((p: Project) => {
                 // Return projects that match the type exactly
                 if (p.type === section.type) return true;
                 // If a project has no type, default it to Portfolio for now
@@ -136,7 +141,7 @@ export function PrintResumeClient({ data }: { data: any }) {
                 <section key={section.type}>
                   <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-4 py-1 tracking-wider font-sans">{section.label}</h2>
                   <div className="space-y-4">
-                    {sectionProjects.map((p: any, i: number) => (
+                    {sectionProjects.map((p: Project, i: number) => (
                       <div key={i} className="project-item">
                         <div className="flex justify-between items-baseline mb-1">
                           <h3 className="text-[11pt] font-bold">{p.title}</h3>
@@ -164,7 +169,7 @@ export function PrintResumeClient({ data }: { data: any }) {
           <section>
             <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-4 py-1 tracking-wider font-sans">Education</h2>
             <div className="space-y-4">
-              {data.education?.map((edu: any, i: number) => (
+              {data.education?.map((edu: Education, i: number) => (
                 <div key={i} className="flex justify-between items-baseline">
                   <div>
                     <h3 className="text-[11pt] font-bold">{edu.school}</h3>

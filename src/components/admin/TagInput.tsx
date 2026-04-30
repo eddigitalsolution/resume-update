@@ -22,13 +22,11 @@ export function TagInput({
   theme = 'indigo'
 }: TagInputProps) {
   const [input, setInput] = useState("");
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
   const [allSkills, setAllSkills] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  const supabase = createClient();
 
   useEffect(() => {
+    const supabase = createClient();
     async function fetchSkills() {
       const { data } = await supabase.from('skills').select('name');
       if (data) {
@@ -38,18 +36,13 @@ export function TagInput({
     fetchSkills();
   }, []);
 
-  useEffect(() => {
-    if (input.trim()) {
-      const filtered = allSkills.filter(s => 
-        s.toLowerCase().includes(input.toLowerCase()) && 
-        !value.includes(s)
-      );
-      setSuggestions(filtered.slice(0, 5));
-      setShowSuggestions(filtered.length > 0);
-    } else {
-      setShowSuggestions(false);
-    }
-  }, [input, allSkills, value]);
+  const suggestions = (input.trim() ? allSkills.filter(s => 
+    s.toLowerCase().includes(input.toLowerCase()) && 
+    !value.includes(s)
+  ).slice(0, 5) : []);
+
+  const [showSuggestionsOverride, setShowSuggestionsOverride] = useState(true);
+  const showSuggestions = !!(input.trim() && suggestions.length > 0 && showSuggestionsOverride);
 
   const addTag = (tag: string) => {
     const trimmedTag = tag.trim();
@@ -57,7 +50,7 @@ export function TagInput({
       onChange([...value, trimmedTag]);
     }
     setInput("");
-    setShowSuggestions(false);
+    setShowSuggestionsOverride(false);
   };
 
   const removeTag = (tagToRemove: string) => {
@@ -113,9 +106,12 @@ export function TagInput({
             ref={inputRef}
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => {
+              setInput(e.target.value);
+              setShowSuggestionsOverride(true);
+            }}
             onKeyDown={handleKeyDown}
-            onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+            onBlur={() => setTimeout(() => setShowSuggestionsOverride(false), 200)}
             placeholder={value.length === 0 ? placeholder : "Add more..."}
             className="w-full h-full bg-transparent border-none focus:outline-none text-sm text-white px-2 py-1 placeholder:text-gray-600"
           />

@@ -2,9 +2,12 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Code, Zap, BarChart3 } from "lucide-react";
+import { Code, Zap } from "lucide-react";
+import type { ResumeData } from "@/types";
 
-export function Hero({ profile }: { profile: any }) {
+type HeroProfile = Pick<ResumeData, 'full_name' | 'summary' | 'homepage_config'> | null;
+
+export function Hero({ profile }: { profile: HeroProfile }) {
   const name = profile?.full_name || "";
   const summary = profile?.summary || "";
   const config = profile?.homepage_config || {};

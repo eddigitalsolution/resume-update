@@ -1,6 +1,6 @@
 -- ==========================================
 -- MASTER SUPABASE SCHEMA (COMBINED)
--- Generated on 2026-04-23
+-- Generated on 2026-04-30 (Post-Audit Hardening)
 -- ==========================================
 
 -- ------------------------------------------
@@ -100,19 +100,31 @@ EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 -- Policies for authenticated admin
 DO $$ BEGIN
-    CREATE POLICY "Allow all actions for authenticated users on projects" ON projects FOR ALL USING (auth.role() = 'authenticated');
+    CREATE POLICY "Allow all actions for authenticated users on projects" ON projects FOR ALL USING (
+      (SELECT role FROM user_roles WHERE user_id = auth.uid() LIMIT 1) = 'admin'
+      OR auth.jwt() ->> 'email' = (SELECT email FROM user_roles WHERE role = 'admin' LIMIT 1)
+    );
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 DO $$ BEGIN
-    CREATE POLICY "Allow all actions for authenticated users on skills" ON skills FOR ALL USING (auth.role() = 'authenticated');
+    CREATE POLICY "Allow all actions for authenticated users on skills" ON skills FOR ALL USING (
+      (SELECT role FROM user_roles WHERE user_id = auth.uid() LIMIT 1) = 'admin'
+      OR auth.jwt() ->> 'email' = (SELECT email FROM user_roles WHERE role = 'admin' LIMIT 1)
+    );
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 DO $$ BEGIN
-    CREATE POLICY "Allow all actions for authenticated users on updates" ON updates FOR ALL USING (auth.role() = 'authenticated');
+    CREATE POLICY "Allow all actions for authenticated users on updates" ON updates FOR ALL USING (
+      (SELECT role FROM user_roles WHERE user_id = auth.uid() LIMIT 1) = 'admin'
+      OR auth.jwt() ->> 'email' = (SELECT email FROM user_roles WHERE role = 'admin' LIMIT 1)
+    );
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 DO $$ BEGIN
-    CREATE POLICY "Allow all actions for authenticated users on resume" ON resume FOR ALL USING (auth.role() = 'authenticated');
+    CREATE POLICY "Allow all actions for authenticated users on resume" ON resume FOR ALL USING (
+      (SELECT role FROM user_roles WHERE user_id = auth.uid() LIMIT 1) = 'admin'
+      OR auth.jwt() ->> 'email' = (SELECT email FROM user_roles WHERE role = 'admin' LIMIT 1)
+    );
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 -- Policies for user_roles
@@ -124,9 +136,9 @@ DO $$ BEGIN
     CREATE POLICY "Admins can manage all roles" ON user_roles FOR ALL USING (EXISTS (SELECT 1 FROM user_roles WHERE user_id = auth.uid() AND role = 'admin'));
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
--- Initial admin seed
+-- REPLACE WITH YOUR ACTUAL ADMIN EMAIL
 INSERT INTO user_roles (email, role)
-VALUES ('idhamyazim1234@yahoo.com', 'admin')
+VALUES ('admin@yourdomain.com', 'admin')
 ON CONFLICT (email) DO UPDATE SET role = 'admin';
 
 -- ------------------------------------------
@@ -134,7 +146,8 @@ ON CONFLICT (email) DO UPDATE SET role = 'admin';
 -- ------------------------------------------
 
 -- Ensure JSONB columns use correct defaults
-ALTER TABLE projects ALTER COLUMN tech_stack SET DEFAULT '[]'::JSONB;
+-- NOTE: tech_stack is TEXT[], not JSONB — use array literal
+ALTER TABLE projects ALTER COLUMN tech_stack SET DEFAULT '{}'::TEXT[];
 
 -- Initial Resume Seed
 INSERT INTO resume (full_name, role, email, phone, location, summary)
@@ -158,3 +171,15 @@ SET homepage_config = jsonb_set(
   ]'::jsonb
 )
 WHERE homepage_config->'contact_options' IS NULL;
+
+-- ------------------------------------------
+-- SECTION 4: MIGRATION LOG (Audit & Hardening)
+-- ------------------------------------------
+-- DATE: 2026-04-30
+-- SUMMARY:
+-- 1. Hardened RLS policies to restrict write access strictly to 'admin' role.
+-- 2. Migrated schema to support Next.js 16 & React 19 standards.
+-- 3. Removed public-prefixed sensitive environment variables.
+-- 4. Standardized naming conventions (fullName -> full_name).
+-- 5. Added data guards for file uploads and database mutations.
+-- 6. Deleted insecure debug routes.

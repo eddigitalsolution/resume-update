@@ -78,7 +78,7 @@ function ResumeBuilderContent() {
         setResumeId(resume.id);
         setData({
           id: resume.id,
-          fullName: resume.full_name || "",
+          full_name: resume.full_name || "",
           role: resume.role || "",
           email: resume.email || "",
           phone: resume.phone || "",
@@ -129,7 +129,7 @@ function ResumeBuilderContent() {
     setSaving(true);
     
     const updatePayload: any = {
-      full_name: data.fullName,
+      full_name: data.full_name,
       role: data.role,
       email: data.email,
       phone: data.phone,
@@ -246,8 +246,8 @@ function ResumeBuilderContent() {
                     <div className="space-y-2">
                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">Full Name</label>
                        <input 
-                        value={data.fullName}
-                        onChange={(e) => updateData('fullName', e.target.value)}
+                        value={data.full_name}
+                        onChange={(e) => updateData('full_name', e.target.value)}
                         className="w-full bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-indigo-500 outline-none transition-colors text-white" 
                       />
                     </div>
@@ -621,11 +621,11 @@ function ResumeBuilderContent() {
                     <div className="flex items-center gap-6 border-b-[1.5px] border-black pb-4 mb-6">
                        {data.photo_url && (
                           <div className="h-16 w-16 rounded-full overflow-hidden border border-black/10 shrink-0">
-                             <img src={data.photo_url} alt={data.fullName} className="h-full w-full object-cover" />
+                             <img src={data.photo_url} alt={data.full_name} className="h-full w-full object-cover" />
                           </div>
                        )}
                        <div className="flex-1 text-center">
-                          <h1 className="text-2xl font-bold uppercase tracking-tight mb-1">{data.fullName}</h1>
+                          <h1 className="text-2xl font-bold uppercase tracking-tight mb-1">{data.full_name}</h1>
                           <div className="text-[10px] space-x-2 text-gray-700">
                              <span>{data.role}</span>
                              <span>•</span>

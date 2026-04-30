@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Terminal, Clock, GitCommit, ChevronRight } from "lucide-react";
+import type { Project, Update } from "@/types";
 
 export function ProgressClient({ 
   initialProjects, 
@@ -10,9 +11,9 @@ export function ProgressClient({
   whatsappBusiness,
   contactOptions 
 }: { 
-  initialProjects: any[], 
-  recentUpdates: any[],
-  stats: any[],
+  initialProjects: Project[], 
+  recentUpdates: (Update & { projects?: { title: string } })[],
+  stats: { label: string, value: string }[],
   whatsappBusiness?: string,
   contactOptions?: Array<{ label: string; message: string; }>
 }) {

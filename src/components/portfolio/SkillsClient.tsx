@@ -7,10 +7,9 @@ import {
   Server, 
   Smartphone, 
   Database, 
-  Terminal,
-  Cpu,
-  Globe
+  Cpu
 } from "lucide-react";
+import type { Skill, SkillCategory } from "@/types";
 
 // Helper to map category names to icons
 const getIcon = (category: string) => {
@@ -23,7 +22,7 @@ const getIcon = (category: string) => {
   return <Code2 className="h-6 w-6 text-gray-500" />;
 };
 
-export function SkillsClient({ categories }: { categories: any[] }) {
+export function SkillsClient({ categories }: { categories: SkillCategory[] }) {
   if (categories.length === 0) {
     return (
       <div className="text-center py-20 border border-dashed border-white/10 rounded-3xl">
@@ -34,7 +33,7 @@ export function SkillsClient({ categories }: { categories: any[] }) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      {categories.map((category: any, idx: number) => (
+      {categories.map((category: SkillCategory, idx: number) => (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -50,7 +49,7 @@ export function SkillsClient({ categories }: { categories: any[] }) {
           </div>
 
           <div className="space-y-6">
-            {category.skills.map((skill: any) => (
+            {category.skills.map((skill: Skill) => (
               <div key={skill.id}>
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-medium text-gray-300">{skill.name}</span>

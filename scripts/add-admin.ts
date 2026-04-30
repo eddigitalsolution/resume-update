@@ -7,7 +7,8 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env.local') })
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-const adminEmail = 'idhamyazim1234@yahoo.com'
+// Replace with your actual admin email
+const adminEmail = 'admin@yourdomain.com'
 
 if (!supabaseUrl || !supabaseKey) {
   console.error('Missing Supabase credentials in .env.local')

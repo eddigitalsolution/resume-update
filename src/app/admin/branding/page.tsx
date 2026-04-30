@@ -31,7 +31,7 @@ export default function BrandingPage() {
       if (resume) {
         setData({
           id: resume.id,
-          fullName: resume.full_name || "",
+          full_name: resume.full_name || "",
           role: resume.role || "",
           email: resume.email || "",
           phone: resume.phone || "",

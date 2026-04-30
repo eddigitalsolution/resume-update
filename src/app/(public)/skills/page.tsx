@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase-server";
 import { SkillsClient } from "@/components/portfolio/SkillsClient";
+import type { Skill, SkillCategory } from "@/types";
 
 export const revalidate = 0;
 
@@ -9,11 +10,10 @@ export default async function SkillsPage() {
   const { data: skills } = await supabase
     .from("skills")
     .select("*")
-    .order("level", { ascending: false });
+    .order("level", { ascending: false }) as { data: Skill[] | null };
 
   // Map icons and group skills
-  // In a real app, you might store category icons in the DB or a map
-  const groupedSkills = skills?.reduce((acc: any, skill: any) => {
+  const groupedSkills = (skills || []).reduce((acc: Record<string, SkillCategory>, skill: Skill) => {
     const category = skill.category;
     if (!acc[category]) {
       acc[category] = {
@@ -25,7 +25,7 @@ export default async function SkillsPage() {
     return acc;
   }, {});
 
-  const skillCategories = Object.values(groupedSkills || {});
+  const skillCategories = Object.values(groupedSkills) as SkillCategory[];
 
   const { data: profile } = await supabase
     .from("resume")

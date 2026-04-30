@@ -34,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${siteName}`
     },
     description: siteDesc,
-    metadataBase: new URL('http://localhost:3000'), // Change to actual URL in production
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
     icons: {
       icon: [
         { url: '/favicon-new.png?v=2', sizes: '32x32', type: 'image/png' },
@@ -46,7 +46,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       type: 'website',
       locale: 'en_US',
-      url: 'http://localhost:3000',
+      url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
       title: siteTitle,
       description: siteDesc,
       siteName: siteName,
@@ -87,7 +87,7 @@ export default async function RootLayout({
           {children}
         </main>
         <footer className="border-t border-white/5 py-8 text-center text-sm text-gray-500">
-          <p>&copy; {new Date().getFullYear()} {siteName}. Resume Update</p>
+          <p>&copy; {new Date().getFullYear()} {siteName}. All rights reserved.</p>
         </footer>
       </body>
     </html>

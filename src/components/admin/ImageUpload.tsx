@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import { Upload, X, Image as ImageIcon, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import NextImage from "next/image";
 import { createClient } from "@/lib/supabase-browser";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +26,12 @@ export function ImageUpload({
   const supabase = createClient();
 
   const handleUpload = async (file: File) => {
+    // Enforce 4MB size limit (matches UI hint)
+    if (file.size > 4 * 1024 * 1024) {
+      alert("File is too large. Please upload an image under 4MB.");
+      return;
+    }
+
     try {
       setIsUploading(true);
       
@@ -33,11 +40,11 @@ export function ImageUpload({
       const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
       const filePath = `${fileName}`;
 
-      const { data, error } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from(bucket)
         .upload(filePath, file);
 
-      if (error) throw error;
+      if (uploadError) throw uploadError;
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
@@ -45,7 +52,8 @@ export function ImageUpload({
         .getPublicUrl(filePath);
 
       onChange(publicUrl);
-    } catch (error: any) {
+    } catch (err) {
+      const error = err as Error;
       console.error("Upload error:", error.message);
       alert("Error uploading file. Make sure the 'portfolio' bucket exists and is public.");
     } finally {
@@ -103,10 +111,11 @@ export function ImageUpload({
               exit={{ opacity: 0 }}
               className="absolute inset-0 w-full h-full"
             >
-              <img 
+              <NextImage 
                 src={value} 
                 alt="Upload Preview" 
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
               />
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                  <div className="flex gap-2">

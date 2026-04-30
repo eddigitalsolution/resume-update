@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
 import * as LucideIcons from "lucide-react";
+import { HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface StatItem {
@@ -37,7 +37,7 @@ export function ImpactBar({ stats }: { stats?: StatItem[] }) {
         <div className="relative grid grid-cols-2 md:grid-cols-4 items-center gap-6 lg:gap-8 p-6 lg:p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm shadow-2xl">
           {stats.map((stat, i) => {
             // Find the Lucide icon component by name
-            const IconComponent = (LucideIcons as any)[stat.icon] || LucideIcons.HelpCircle;
+            const IconComponent = (LucideIcons as unknown as Record<string, React.ComponentType<{ size?: number; className?: string }>>)[stat.icon] || HelpCircle;
             const colorClass = getColorClass(stat.color);
             
             return (
