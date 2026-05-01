@@ -40,20 +40,36 @@ export async function proxy(request: NextRequest) {
   }
 
   const adminEmail = process.env.ADMIN_EMAIL;
-  const isAdminEmail = user?.email && adminEmail && user.email.toLowerCase() === adminEmail.toLowerCase();
+  const userEmail = user?.email?.toLowerCase().trim();
+  const isAdminEmail = userEmail && adminEmail && userEmail === adminEmail.toLowerCase().trim();
   const hasAdminRole = user?.user_metadata?.role === 'admin';
   let isAdmin = hasAdminRole || isAdminEmail;
 
-  // Fallback: Check the database if email/metadata check fails
-  if (user && !isAdmin && user.email) {
-    const { data: roleData } = await supabase
-      .from('user_roles')
-      .select('role')
-      .eq('email', user.email)
-      .maybeSingle();
-    
-    if (roleData?.role === 'admin') {
-      isAdmin = true;
+  // Fallback: Check the database using service role if email/metadata check fails
+  if (user && !isAdmin && userEmail && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    try {
+      const adminClient = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY,
+        {
+          cookies: {
+            getAll() { return request.cookies.getAll() },
+            setAll() {} // Service role doesn't need to set cookies back
+          },
+        }
+      );
+
+      const { data: roleData } = await adminClient
+        .from('user_roles')
+        .select('role')
+        .eq('email', userEmail)
+        .maybeSingle();
+      
+      if (roleData?.role === 'admin') {
+        isAdmin = true;
+      }
+    } catch (err) {
+      console.error('Proxy role check error:', err);
     }
   }
 
