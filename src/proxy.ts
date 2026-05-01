@@ -39,7 +39,8 @@ export async function proxy(request: NextRequest) {
     // Session is invalid or refresh token is missing - ignore noisy logs
   }
 
-  const adminEmail = process.env.ADMIN_EMAIL;
+  // Hardcoded fallback for production if Vercel env vars are missing
+  const adminEmail = process.env.ADMIN_EMAIL || 'idhamyazim1234@yahoo.com';
   const userEmail = user?.email?.toLowerCase().trim();
   const isAdminEmail = userEmail && adminEmail && userEmail === adminEmail.toLowerCase().trim();
   const hasAdminRole = user?.user_metadata?.role === 'admin';
