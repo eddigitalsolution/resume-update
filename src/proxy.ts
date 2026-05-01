@@ -1,7 +1,7 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request: {
       headers: request.headers,
@@ -19,7 +19,9 @@ export async function middleware(request: NextRequest) {
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
           supabaseResponse = NextResponse.next({
-            request,
+            request: {
+              headers: request.headers,
+            },
           })
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options)
@@ -38,26 +40,49 @@ export async function middleware(request: NextRequest) {
   }
 
   const adminEmail = process.env.ADMIN_EMAIL;
-  const isAdminEmail = user?.email === adminEmail;
+  const isAdminEmail = user?.email && adminEmail && user.email.toLowerCase() === adminEmail.toLowerCase();
   const hasAdminRole = user?.user_metadata?.role === 'admin';
-  const isAdmin = hasAdminRole || isAdminEmail;
+  let isAdmin = hasAdminRole || isAdminEmail;
+
+  // Fallback: Check the database if email/metadata check fails
+  if (user && !isAdmin) {
+    const { data: roleData } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .maybeSingle();
+    
+    if (roleData?.role === 'admin') {
+      isAdmin = true;
+    }
+  }
 
   // Protect admin routes
   if (request.nextUrl.pathname.startsWith('/admin')) {
     if (!user || !isAdmin) {
-      return NextResponse.redirect(new URL('/login', request.url))
+      const url = new URL('/login', request.url)
+      const redirectResponse = NextResponse.redirect(url)
+      
+      // Copy cookies from supabaseResponse to the redirect (crucial for session persistence)
+      supabaseResponse.cookies.getAll().forEach((cookie) => {
+        redirectResponse.cookies.set(cookie.name, cookie.value, cookie)
+      })
+      
+      return redirectResponse
     }
   }
 
   // Redirect from login if already logged in
   if (request.nextUrl.pathname === '/login' && user) {
-    if (isAdmin) {
-      return NextResponse.redirect(new URL('/admin/dashboard', request.url))
-    } else {
-      // Prevent redirect loop for non-admin users by sending them home
-      // instead of back to /admin/dashboard which would reject them.
-      return NextResponse.redirect(new URL('/', request.url))
-    }
+    const targetUrl = isAdmin ? '/admin/dashboard' : '/';
+    const redirectResponse = NextResponse.redirect(new URL(targetUrl, request.url))
+    
+    // Copy cookies to redirect
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie)
+    })
+    
+    return redirectResponse
   }
 
   return supabaseResponse
