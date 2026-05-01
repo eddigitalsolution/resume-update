@@ -45,11 +45,11 @@ export async function proxy(request: NextRequest) {
   let isAdmin = hasAdminRole || isAdminEmail;
 
   // Fallback: Check the database if email/metadata check fails
-  if (user && !isAdmin) {
+  if (user && !isAdmin && user.email) {
     const { data: roleData } = await supabase
       .from('user_roles')
       .select('role')
-      .eq('user_id', user.id)
+      .eq('email', user.email)
       .maybeSingle();
     
     if (roleData?.role === 'admin') {
