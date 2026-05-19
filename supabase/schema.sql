@@ -100,31 +100,19 @@ EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 -- Policies for authenticated admin
 DO $$ BEGIN
-    CREATE POLICY "Allow all actions for authenticated users on projects" ON projects FOR ALL USING (
-      (SELECT role FROM user_roles WHERE user_id = auth.uid() LIMIT 1) = 'admin'
-      OR auth.jwt() ->> 'email' = (SELECT email FROM user_roles WHERE role = 'admin' LIMIT 1)
-    );
+    CREATE POLICY "Allow all actions for authenticated users on projects" ON projects FOR ALL USING (public.is_admin());
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 DO $$ BEGIN
-    CREATE POLICY "Allow all actions for authenticated users on skills" ON skills FOR ALL USING (
-      (SELECT role FROM user_roles WHERE user_id = auth.uid() LIMIT 1) = 'admin'
-      OR auth.jwt() ->> 'email' = (SELECT email FROM user_roles WHERE role = 'admin' LIMIT 1)
-    );
+    CREATE POLICY "Allow all actions for authenticated users on skills" ON skills FOR ALL USING (public.is_admin());
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 DO $$ BEGIN
-    CREATE POLICY "Allow all actions for authenticated users on updates" ON updates FOR ALL USING (
-      (SELECT role FROM user_roles WHERE user_id = auth.uid() LIMIT 1) = 'admin'
-      OR auth.jwt() ->> 'email' = (SELECT email FROM user_roles WHERE role = 'admin' LIMIT 1)
-    );
+    CREATE POLICY "Allow all actions for authenticated users on updates" ON updates FOR ALL USING (public.is_admin());
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 DO $$ BEGIN
-    CREATE POLICY "Allow all actions for authenticated users on resume" ON resume FOR ALL USING (
-      (SELECT role FROM user_roles WHERE user_id = auth.uid() LIMIT 1) = 'admin'
-      OR auth.jwt() ->> 'email' = (SELECT email FROM user_roles WHERE role = 'admin' LIMIT 1)
-    );
+    CREATE POLICY "Allow all actions for authenticated users on resume" ON resume FOR ALL USING (public.is_admin());
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 -- Policies for user_roles
@@ -133,7 +121,7 @@ DO $$ BEGIN
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 DO $$ BEGIN
-    CREATE POLICY "Admins can manage all roles" ON user_roles FOR ALL USING (EXISTS (SELECT 1 FROM user_roles WHERE user_id = auth.uid() AND role = 'admin'));
+    CREATE POLICY "Admins can manage all roles" ON user_roles FOR ALL USING (public.is_admin());
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 -- REPLACE WITH YOUR ACTUAL ADMIN EMAIL
@@ -173,7 +161,43 @@ SET homepage_config = jsonb_set(
 WHERE homepage_config->'contact_options' IS NULL;
 
 -- ------------------------------------------
--- SECTION 4: MIGRATION LOG (Audit & Hardening)
+-- SECTION 4: GALLERY MODULE (AI Image / Design / Video SS)
+-- ------------------------------------------
+
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.user_roles
+    WHERE (user_id = auth.uid() OR email = auth.jwt() ->> 'email')
+      AND role = 'admin'
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TABLE IF NOT EXISTS gallery (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  title TEXT NOT NULL,
+  description TEXT,
+  image_url TEXT NOT NULL,
+  prompt TEXT,
+  type TEXT NOT NULL DEFAULT 'AI Image', -- 'AI Image', 'Design', 'Video SS'
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+ALTER TABLE gallery ENABLE ROW LEVEL SECURITY;
+
+DO $$ BEGIN
+    CREATE POLICY "Allow public read-only access to gallery" ON gallery FOR SELECT USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+DO $$ BEGIN
+    CREATE POLICY "Allow all actions for authenticated users on gallery" ON gallery FOR ALL USING (public.is_admin());
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+-- ------------------------------------------
+-- SECTION 5: MIGRATION LOG (Audit & Hardening)
 -- ------------------------------------------
 -- DATE: 2026-04-30
 -- SUMMARY:

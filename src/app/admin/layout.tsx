@@ -18,7 +18,8 @@ import {
   Zap,
   BarChart3,
   FolderKanban,
-  History
+  History,
+  Images
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -35,6 +36,7 @@ const adminNavItems = [
   { name: "Experience", href: "/admin/experience", icon: History },
   { name: "Education", href: "/admin/education", icon: GraduationCap },
   { name: "Resume", href: "/admin/resume", icon: FileText },
+  { name: "Gallery", href: "/admin/gallery", icon: Images },
 ];
 
 export default function AdminLayout({

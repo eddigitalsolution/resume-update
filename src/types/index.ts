@@ -92,3 +92,14 @@ export interface ResumeData {
   };
   whatsapp_personal?: string;
 }
+
+export interface GalleryItem {
+  id: string;
+  title: string;
+  description?: string;
+  image_url: string;
+  prompt?: string;
+  type: 'AI Image' | 'Design' | 'Video SS';
+  created_at?: string;
+  updated_at?: string;
+}

@@ -11,6 +11,7 @@ const navItems = [
   { name: "Portfolio", href: "/portfolio" },
   { name: "Skills", href: "/skills" },
   { name: "Progress", href: "/progress" },
+  { name: "Gallery", href: "/gallery" },
 ];
 
 export function Navbar({ siteName = "Portfolio", logoInitial = "P" }: { siteName?: string, logoInitial?: string }) {
