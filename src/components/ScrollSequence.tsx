@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const TOTAL_FRAMES = 250;
+const PRIORITY_FRAMES = 30; // Canvas unlocks after these load; rest stream in background
 
 const formatFramePath = (index: number) => {
   const pad = String(index).padStart(3, "0");
@@ -24,28 +25,50 @@ export function ScrollSequence() {
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const currentFrameRef = useRef(0);
 
+
+
   useEffect(() => {
-    // 1. Preload all sequence frames
-    let loadedCount = 0;
-    const loadedImages: HTMLImageElement[] = [];
+    // Pre-allocate the full array with nulls so index access is always safe
+    const loadedImages: HTMLImageElement[] = Array(TOTAL_FRAMES).fill(null);
+    imagesRef.current = loadedImages;
 
-    const handleImageLoad = () => {
-      loadedCount++;
-      const pct = Math.round((loadedCount / TOTAL_FRAMES) * 100);
-      setLoadingProgress(pct);
+    let totalLoaded = 0;
 
-      if (loadedCount === TOTAL_FRAMES) {
-        imagesRef.current = loadedImages;
-        setIsLoaded(true);
-      }
+    const onAnyLoad = () => {
+      totalLoaded++;
+      setLoadingProgress(Math.round((totalLoaded / TOTAL_FRAMES) * 100));
+      if (totalLoaded === TOTAL_FRAMES) setIsLoaded(true);
     };
 
-    for (let i = 1; i <= TOTAL_FRAMES; i++) {
+    // ── Phase 1: Priority batch (frames 1–30) ────────────────────────────────
+    let priorityDone = 0;
+    for (let i = 1; i <= PRIORITY_FRAMES; i++) {
       const img = new Image();
       img.src = formatFramePath(i);
-      img.onload = handleImageLoad;
-      img.onerror = handleImageLoad;
-      loadedImages.push(img);
+      img.onload = img.onerror = () => {
+        priorityDone++;
+        onAnyLoad();
+        // As soon as all priority frames are ready, unlock the canvas
+        if (priorityDone === PRIORITY_FRAMES) {
+          setIsLoaded(true);
+          // ── Phase 2: Background-load the rest in small batches ─────────────
+          const BATCH = 10;
+          let idx = PRIORITY_FRAMES + 1;
+          const loadBatch = () => {
+            const end = Math.min(idx + BATCH - 1, TOTAL_FRAMES);
+            for (let j = idx; j <= end; j++) {
+              const bg = new Image();
+              bg.src = formatFramePath(j);
+              bg.onload = bg.onerror = onAnyLoad;
+              loadedImages[j - 1] = bg;
+            }
+            idx = end + 1;
+            if (idx <= TOTAL_FRAMES) requestIdleCallback(loadBatch, { timeout: 200 });
+          };
+          requestIdleCallback(loadBatch, { timeout: 200 });
+        }
+      };
+      loadedImages[i - 1] = img;
     }
   }, []);
 

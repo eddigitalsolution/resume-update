@@ -88,7 +88,7 @@ export function Hero({ profile }: { profile: HeroProfile }) {
 
           {/* Base character image */}
           <image
-            href="/herosection/hero_avatar.png?v=11"
+            href="/herosection/hero_avatar.webp"
             x="0"
             y="0"
             width="1024"
