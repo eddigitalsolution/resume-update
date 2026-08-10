@@ -79,6 +79,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${outfit.variable} ${inter.variable} dark antialiased`}
     >
       <body className="font-sans min-h-screen flex flex-col bg-black text-gray-100">

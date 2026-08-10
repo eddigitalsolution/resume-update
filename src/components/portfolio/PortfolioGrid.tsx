@@ -112,7 +112,7 @@ export function PortfolioGrid({ initialProjects }: { initialProjects: Project[] 
         layout
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
       >
-        {filteredProjects.map((project) => (
+        {filteredProjects.map((project, index) => (
           <motion.div
             layout
             initial={{ opacity: 0, scale: 0.9 }}
@@ -128,7 +128,9 @@ export function PortfolioGrid({ initialProjects }: { initialProjects: Project[] 
                   alt={project.title} 
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105" 
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  priority={index < 3}
+                  loading={index < 3 ? "eager" : "lazy"}
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-700">
