@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { createClient } from "@/lib/supabase-server";
+import { SmoothScroll } from "@/components/SmoothScroll";
 
 export default async function PublicLayout({
   children,
@@ -17,7 +18,7 @@ export default async function PublicLayout({
   const logoInitial = siteName.charAt(0).toUpperCase();
 
   return (
-    <>
+    <SmoothScroll>
       <Navbar siteName={siteName} logoInitial={logoInitial} />
       <main className="flex-1 pt-24 lg:pt-32">
         {children}
@@ -25,6 +26,6 @@ export default async function PublicLayout({
       <footer className="border-t border-white/5 py-8 text-center text-sm text-gray-500">
         <p>&copy; {new Date().getFullYear()} {siteName}. All rights reserved.</p>
       </footer>
-    </>
+    </SmoothScroll>
   );
 }

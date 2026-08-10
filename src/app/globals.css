@@ -144,4 +144,35 @@
     background: rgba(99, 102, 241, 0.3);
     color: white;
   }
+
+  /* Lenis smooth scrolling compatibility */
+  html.lenis, html.lenis body {
+    height: auto;
+  }
+  
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  /* Radial Vignette Shading */
+  .bg-radial-vignette {
+    background: radial-gradient(circle at center, transparent 35%, rgba(0, 0, 0, 0.9) 100%);
+  }
+
+  /* Smooth canvas rendering rules */
+  canvas {
+    image-rendering: auto;
+  }
+
+  /* Hide Next.js Dev indicators */
+  #nextjs-dev-indicator,
+  [data-nextjs-dev-indicator],
+  nextjs-portal,
+  next-route-announcer {
+    display: none !important;
+  }
 }

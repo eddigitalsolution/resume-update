@@ -79,9 +79,9 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${outfit.variable} ${inter.variable} dark h-full antialiased`}
+      className={`${outfit.variable} ${inter.variable} dark antialiased`}
     >
-      <body className="font-sans min-h-full flex flex-col bg-black text-gray-100">
+      <body className="font-sans min-h-screen flex flex-col bg-black text-gray-100">
         {children}
       </body>
     </html>
