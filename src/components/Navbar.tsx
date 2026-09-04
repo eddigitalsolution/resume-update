@@ -39,6 +39,14 @@ export function Navbar({
     return null;
   }
 
+  const handleHomeClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    setIsOpen(false);
+  };
+
   return (
     <header className="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-5xl transition-all duration-300">
       <nav
@@ -49,7 +57,12 @@ export function Navbar({
         )}
       >
         {/* Brand Logo */}
-        <Link href="/" id="nav-logo" className="flex items-center gap-3 pl-2 group">
+        <Link 
+          href="/" 
+          id="nav-logo" 
+          onClick={handleHomeClick}
+          className="flex items-center gap-3 pl-2 group"
+        >
           <div className="relative h-8 w-8 rounded-full bg-linear-to-tr from-indigo-600 via-indigo-500 to-purple-500 p-0.5 shadow-[0_0_15px_rgba(99,102,241,0.4)] group-hover:scale-105 transition-transform duration-300">
             <div className="h-full w-full rounded-full bg-zinc-950 flex items-center justify-center font-bold text-xs text-white">
               {logoInitial}
@@ -69,11 +82,13 @@ export function Navbar({
         <div className="hidden md:flex items-center gap-1 bg-zinc-900/60 p-1 rounded-full border border-white/5">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
+            const isHome = item.href === "/";
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 id={`nav-link-${item.name.toLowerCase()}`}
+                onClick={isHome ? handleHomeClick : undefined}
                 className={cn(
                   "relative px-4 py-1.5 text-xs font-medium transition-all duration-300 rounded-full",
                   isActive
@@ -144,6 +159,7 @@ export function Navbar({
             <div className="flex flex-col gap-2">
               {navItems.map((item) => {
                 const isActive = pathname === item.href;
+                const isHome = item.href === "/";
                 return (
                   <Link
                     key={item.href}
@@ -155,7 +171,7 @@ export function Navbar({
                         ? "bg-indigo-500/10 text-indigo-300 border border-indigo-500/20"
                         : "text-zinc-400 hover:text-white hover:bg-white/5"
                     )}
-                    onClick={() => setIsOpen(false)}
+                    onClick={isHome ? handleHomeClick : () => setIsOpen(false)}
                   >
                     <span>{item.name}</span>
                     {isActive && <Sparkles size={13} className="text-indigo-400" />}
