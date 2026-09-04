@@ -1,10 +1,9 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import Link from "next/link";
-import { Code, ArrowRight } from "lucide-react";
+import Image from "next/image";
 import type { ResumeData } from "@/types";
 
 type HeroProfile = Pick<ResumeData, 'full_name' | 'summary' | 'homepage_config'> | null;
@@ -15,24 +14,6 @@ export function Hero({ profile }: { profile: HeroProfile }) {
   const config = profile?.homepage_config || {};
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const x = (e.clientX - centerX) / (rect.width / 2);
-      const y = (e.clientY - centerY) / (rect.height / 2);
-      setMouse({
-        x: Math.max(-1, Math.min(1, x)),
-        y: Math.max(-1, Math.min(1, y)),
-      });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
 
   useGSAP(() => {
     const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
@@ -54,11 +35,6 @@ export function Hero({ profile }: { profile: HeroProfile }) {
       { opacity: 0, y: 20 },
       { opacity: 1, y: 0, duration: 0.8 },
       "-=0.8"
-    )
-    .fromTo(".hero-btn",
-      { opacity: 0, scale: 0.9, y: 20 },
-      { opacity: 1, scale: 1, y: 0, duration: 0.8, stagger: 0.1 },
-      "-=0.6"
     );
   }, { scope: containerRef });
 
@@ -68,69 +44,16 @@ export function Hero({ profile }: { profile: HeroProfile }) {
       className="relative w-full min-h-screen overflow-hidden bg-black"
       style={{ perspective: "1200px" }}
     >
-      {/* ── Full-screen background image & SVG eyes layer (static frame) ── */}
+      {/* ── Full-screen background avatar image ── */}
       <div className="hero-image-wrap absolute inset-0 opacity-0">
-        <svg
-          className="absolute inset-0 w-full h-full pointer-events-none select-none"
-          viewBox="0 0 1024 1024"
-          preserveAspectRatio="xMidYMid slice"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs>
-            {/* Clip paths matching inner glasses lenses to contain pupils */}
-            <clipPath id="leftEyeClip">
-              <ellipse cx="460" cy="298" rx="16" ry="8" />
-            </clipPath>
-            <clipPath id="rightEyeClip">
-              <ellipse cx="572" cy="298" rx="16" ry="8" />
-            </clipPath>
-          </defs>
-
-          {/* Base character image */}
-          <image
-            href="/herosection/hero_avatar.webp"
-            x="0"
-            y="0"
-            width="1024"
-            height="1024"
-          />
-
-          {/* Left pupil */}
-          <g clipPath="url(#leftEyeClip)">
-            <ellipse
-              cx={460 + mouse.x * 5}
-              cy={298 + mouse.y * 2}
-              rx="8"
-              ry="8"
-              fill="#0f0f0f"
-            />
-            {/* Pupil Glint */}
-            <circle
-              cx={456 + mouse.x * 5}
-              cy={294 + mouse.y * 2}
-              r="2.2"
-              fill="white"
-            />
-          </g>
-
-          {/* Right pupil */}
-          <g clipPath="url(#rightEyeClip)">
-            <ellipse
-              cx={572 + mouse.x * 5}
-              cy={298 + mouse.y * 2}
-              rx="8"
-              ry="8"
-              fill="#0f0f0f"
-            />
-            {/* Pupil Glint */}
-            <circle
-              cx={568 + mouse.x * 5}
-              cy={294 + mouse.y * 2}
-              r="2.2"
-              fill="white"
-            />
-          </g>
-        </svg>
+        <Image
+          src="/herosection/hero_avatar2.png"
+          alt={name || "Hero Avatar"}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center pointer-events-none select-none"
+        />
       </div>
 
       {/* ── Multi-layer dark gradient vignette for text readability ── */}
@@ -165,28 +88,9 @@ export function Hero({ profile }: { profile: HeroProfile }) {
           </h1>
 
           {/* Description */}
-          <p className="hero-description opacity-0 max-w-xl text-base md:text-lg text-zinc-300 mb-10 leading-relaxed">
+          <p className="hero-description opacity-0 max-w-xl text-base md:text-lg text-zinc-300 mb-2 leading-relaxed">
             I am <span className="text-white font-bold">{name}</span>. {summary}
           </p>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-start gap-4">
-            <Link
-              href="/portfolio?type=Freelance"
-              className="hero-btn opacity-0 group inline-flex h-14 items-center justify-center rounded-xl bg-white text-black px-8 text-sm font-bold transition-all hover:bg-zinc-200 active:scale-95 shadow-2xl"
-            >
-              {config.hero_cta_primary || "View Selected Projects"}
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-
-            <Link
-              href="/portfolio?type=Portfolio"
-              className="hero-btn opacity-0 group inline-flex h-14 items-center justify-center rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 text-sm font-bold transition-all hover:bg-white/20 active:scale-95"
-            >
-              {config.hero_cta_secondary || "Technical Lab"}
-              <Code className="ml-2 h-4 w-4 text-zinc-300 transition-transform group-hover:rotate-6" />
-            </Link>
-          </div>
 
         </div>
       </div>

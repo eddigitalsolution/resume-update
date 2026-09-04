@@ -83,6 +83,7 @@ function ResumeBuilderContent() {
           email: resume.email || "",
           phone: resume.phone || "",
           location: resume.location || "",
+          website_url: resume.website_url || "",
           summary: resume.summary || "",
           experience: resume.experience || [],
           skills: resume.skills || [],
@@ -134,6 +135,7 @@ function ResumeBuilderContent() {
       email: data.email,
       phone: data.phone,
       location: data.location,
+      website_url: data.website_url,
       summary: data.summary,
       experience: data.experience,
       skills: data.skills,
@@ -277,6 +279,15 @@ function ResumeBuilderContent() {
                         className="w-full bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-indigo-500 outline-none transition-colors text-white" 
                       />
                     </div>
+                 </div>
+                 <div className="space-y-2">
+                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">Website / Portfolio URL</label>
+                    <input 
+                     placeholder="e.g. https://yourwebsite.com"
+                     value={data.website_url || ''}
+                     onChange={(e) => updateData('website_url', e.target.value)}
+                     className="w-full bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-indigo-500 outline-none transition-colors text-white" 
+                   />
                  </div>
                  <div className="space-y-2">
                     <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">Summary</label>
@@ -616,102 +627,118 @@ function ResumeBuilderContent() {
              <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">ATS Preview</span>
            </div>
            <div className="flex-1 bg-white rounded-xl overflow-hidden shadow-2xl relative">
-              <div className="absolute inset-0 overflow-y-auto p-[5%] bg-white text-black font-serif">
-                <div className="max-w-full mx-auto">
-                    <div className="flex items-center gap-6 border-b-[1.5px] border-black pb-4 mb-6">
-                       {data.photo_url && (
-                          <div className="h-16 w-16 rounded-full overflow-hidden border border-black/10 shrink-0">
-                             <img src={data.photo_url} alt={data.full_name} className="h-full w-full object-cover" />
-                          </div>
-                       )}
-                       <div className="flex-1 text-center">
-                          <h1 className="text-2xl font-bold uppercase tracking-tight mb-1">{data.full_name}</h1>
-                          <div className="text-[10px] space-x-2 text-gray-700">
-                             <span>{data.role}</span>
-                             <span>•</span>
-                             <span>{data.location}</span>
-                             <span>•</span>
-                             <span>{data.email}</span>
-                             <span>•</span>
-                             <span>{data.phone}</span>
-                          </div>
-                       </div>
-                    </div>
-
-                   <div className="mb-6">
-                      <h2 className="text-xs font-bold uppercase border-b border-black mb-2 py-0.5 tracking-wider font-sans">Summary</h2>
-                      <p className="text-[10px] leading-relaxed text-gray-800">{data.summary}</p>
-                   </div>
-
-                   <div className="mb-6">
-                      <h2 className="text-xs font-bold uppercase border-b border-black mb-3 py-0.5 tracking-wider font-sans">Experience</h2>
-                      <div className="space-y-4 text-gray-800">
-                         {data.experience.map((exp, i) => (
-                           <div key={i}>
-                              <div className="flex justify-between items-baseline mb-1">
-                                 <h3 className="text-[11px] font-bold">{exp.company}</h3>
-                                 <span className="text-[10px] italic">{exp.period}</span>
-                              </div>
-                              <p className="text-[10px] font-medium italic mb-1.5">{exp.role}</p>
-                              <ul className="list-disc ml-4 space-y-1">
-                                 {(exp.desc || []).map((d, j) => (
-                                   <li key={j} className="text-[10px] leading-relaxed">{d}</li>
-                                 ))}
-                              </ul>
+              <div className="absolute inset-0 overflow-y-auto p-6 bg-white text-black font-serif">
+                 <div className="max-w-full mx-auto space-y-4">
+                     <div className="flex items-center gap-4 border-b-2 border-black pb-3 mb-4">
+                        {data.photo_url && (
+                           <div className="h-14 w-14 rounded-full overflow-hidden border border-black/10 shrink-0">
+                              <img src={data.photo_url} alt={data.full_name} className="h-full w-full object-cover" />
                            </div>
-                         ))}
-                      </div>
-                   </div>
-
-                   {/* Projects Duality Split */}
-                   {[
-                     { label: "Freelance Success", type: "Freelance" },
-                     { label: "Engineering Portfolio", type: "Portfolio" }
-                   ].map((section) => {
-                     const sectionProjects = dbProjects.filter(p => data.projects?.includes(p.id) && p.type === section.type);
-                     if (sectionProjects.length === 0) return null;
-                     
-                     return (
-                        <div key={section.type} className="mb-6">
-                           <h2 className="text-xs font-bold uppercase border-b border-black mb-3 py-0.5 tracking-wider font-sans">{section.label}</h2>
-                           <div className="space-y-4 text-gray-800">
-                             {sectionProjects.map((p, i) => (
-                               <div key={i}>
-                                 <div className="flex justify-between items-baseline mb-1">
-                                   <h3 className="text-[11px] font-bold">{p.title}</h3>
-                                   <span className="text-[10px] italic">{p.category}</span>
-                                 </div>
-                                 <p className="text-[10px] leading-relaxed italic mb-1">Tech: {p.tech_stack.join(", ")}</p>
-                                 <p className="text-[10px] leading-relaxed">{p.description}</p>
-                               </div>
-                             ))}
+                        )}
+                        <div className="flex-1 text-center">
+                           <h1 className="text-[18pt] font-bold uppercase tracking-tight mb-1">{data.full_name}</h1>
+                           <div className="text-[10pt] flex flex-wrap justify-center gap-x-2.5 gap-y-0.5 text-gray-800 font-sans font-medium">
+                              <span>{data.role}</span>
+                              <span>•</span>
+                              <span>{data.location}</span>
+                              <span>•</span>
+                              <span>{data.email}</span>
+                              <span>•</span>
+                              <span>{data.phone}</span>
+                              {data.website_url && (
+                                 <>
+                                   <span>•</span>
+                                   <span>{data.website_url}</span>
+                                 </>
+                               )}
                            </div>
                         </div>
-                     );
-                   })}
+                     </div>
 
-                   <div className="mb-6">
-                      <h2 className="text-xs font-bold uppercase border-b border-black mb-2 py-0.5 tracking-wider font-sans">Skills</h2>
-                      <p className="text-[10px] leading-relaxed text-gray-800 font-medium">
-                         {data.skills.filter(s => s && s.trim() !== "").join(" • ")}
-                      </p>
-                   </div>
-
-                   <div>
-                      <h2 className="text-xs font-bold uppercase border-b border-black mb-3 py-0.5 tracking-wider font-sans">Education</h2>
-                      <div className="space-y-3 text-gray-800">
-                         {(data.education || []).map((edu, i) => (
-                           <div key={i} className="flex justify-between items-baseline">
-                              <div>
-                                 <h3 className="text-[11px] font-bold">{edu.school}</h3>
-                                 <p className="text-[10px] italic">{edu.degree}</p>
-                              </div>
-                              <span className="text-[10px]">{edu.period}</span>
-                           </div>
-                         ))}
+                    {data.summary && (
+                      <div className="mb-3">
+                         <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-1.5 py-0.5 tracking-wider font-sans">Summary</h2>
+                         <p className="text-[10pt] leading-relaxed text-gray-800">{data.summary}</p>
                       </div>
-                   </div>
-                </div>
+                    )}
+
+                    {data.experience && data.experience.length > 0 && (
+                      <div className="mb-3">
+                         <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-2 py-0.5 tracking-wider font-sans">Experience</h2>
+                         <div className="space-y-2.5 text-gray-800">
+                            {data.experience.map((exp, i) => (
+                              <div key={i}>
+                                 <div className="flex justify-between items-baseline mb-0.5">
+                                    <h3 className="text-[10.5pt] font-bold">{exp.company}</h3>
+                                    <span className="text-[10pt] italic font-sans">{exp.period}</span>
+                                 </div>
+                                 <p className="text-[10pt] font-bold italic mb-1 font-sans">{exp.role}</p>
+                                 <ul className="list-disc ml-4 space-y-0.5">
+                                    {(exp.desc || []).map((d, j) => (
+                                      <li key={j} className="text-[10pt] leading-relaxed">{d}</li>
+                                    ))}
+                                 </ul>
+                              </div>
+                            ))}
+                         </div>
+                      </div>
+                    )}
+
+                    {/* Projects Duality Split */}
+                    {[
+                      { label: "Freelance Success", type: "Freelance" },
+                      { label: "Engineering Portfolio", type: "Portfolio" }
+                    ].map((section) => {
+                      const sectionProjects = dbProjects.filter(p => data.projects?.includes(p.id) && p.type === section.type);
+                      if (sectionProjects.length === 0) return null;
+                      
+                      return (
+                         <div key={section.type} className="mb-3">
+                            <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-2 py-0.5 tracking-wider font-sans">{section.label}</h2>
+                            <div className="space-y-2 text-gray-800">
+                              {sectionProjects.map((p, i) => (
+                                <div key={i}>
+                                  <div className="flex justify-between items-baseline mb-0.5">
+                                    <h3 className="text-[10.5pt] font-bold">{p.title}</h3>
+                                    <span className="text-[10pt] italic font-sans">{p.category}</span>
+                                  </div>
+                                  {p.tech_stack && p.tech_stack.length > 0 && (
+                                    <p className="text-[9.5pt] font-bold italic mb-0.5 font-sans text-gray-700">Tech: {p.tech_stack.join(", ")}</p>
+                                  )}
+                                  <p className="text-[10pt] leading-relaxed">{p.description}</p>
+                                </div>
+                              ))}
+                            </div>
+                         </div>
+                      );
+                    })}
+
+                    {data.skills && data.skills.length > 0 && (
+                      <div className="mb-3">
+                         <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-1.5 py-0.5 tracking-wider font-sans">Skills</h2>
+                         <p className="text-[10pt] leading-relaxed text-gray-800 font-medium">
+                            {data.skills.filter(s => s && s.trim() !== "").join(" • ")}
+                         </p>
+                      </div>
+                    )}
+
+                    {data.education && data.education.length > 0 && (
+                      <div className="mb-3">
+                         <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-1.5 py-0.5 tracking-wider font-sans">Education</h2>
+                         <div className="space-y-1.5 text-gray-800">
+                            {data.education.map((edu, i) => (
+                              <div key={i} className="flex justify-between items-baseline">
+                                 <div>
+                                    <h3 className="text-[10.5pt] font-bold">{edu.school}</h3>
+                                    <p className="text-[10pt] italic font-sans">{edu.degree}</p>
+                                 </div>
+                                 <span className="text-[10pt] font-sans">{edu.period}</span>
+                              </div>
+                            ))}
+                         </div>
+                      </div>
+                    )}
+                 </div>
               </div>
            </div>
         </div>

@@ -11,17 +11,17 @@ export function PrintResumeClient({ data }: { data: PrintData }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       window.print();
-    }, 1000);
+    }, 800);
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div className="bg-white text-black w-full overflow-visible relative">
+    <div className="bg-white text-black w-full overflow-visible relative font-serif">
       <style>{`
         @media print {
           @page {
             size: A4;
-            margin: 1.5cm;
+            margin: 0.8cm 1cm;
           }
           body {
             background: white !important;
@@ -34,19 +34,18 @@ export function PrintResumeClient({ data }: { data: PrintData }) {
             display: none !important;
           }
           section {
-            page-break-inside: avoid;
-            break-inside: avoid;
-            margin-bottom: 2.5rem; /* Increased spacing for better 2-page flow */
+            page-break-inside: auto !important;
+            break-inside: auto !important;
+            margin-bottom: 0.8rem;
           }
           h2 {
             page-break-after: avoid;
             break-after: avoid;
           }
-          /* Ensure no individual item inside a section gets split */
           .experience-item, .project-item {
             page-break-inside: avoid;
             break-inside: avoid;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.6rem;
           }
         }
         body {
@@ -59,68 +58,78 @@ export function PrintResumeClient({ data }: { data: PrintData }) {
       <div className="no-print fixed top-4 right-4 z-50">
         <button 
           onClick={() => window.print()}
-          className="bg-black text-white px-6 py-2 rounded-full font-bold shadow-lg flex items-center gap-2 hover:bg-zinc-800 transition-colors"
+          className="bg-black text-white px-5 py-2 rounded-full text-xs font-bold shadow-xl flex items-center gap-2 hover:bg-zinc-800 transition-colors"
         >
           Print / Save PDF
         </button>
       </div>
 
-      <div className="max-w-[21cm] mx-auto p-4 md:p-8 font-serif">
-        <div className="flex items-center gap-8 border-b-2 border-black pb-6 mb-8">
+      <div className="max-w-[21cm] mx-auto p-4 md:p-6 text-black leading-snug">
+        {/* Header: Name at 18pt */}
+        <div className="flex items-center gap-5 border-b-2 border-black pb-3 mb-4">
           {data.photo_url && (
-            <div className="h-24 w-24 rounded-full overflow-hidden border border-black/10 shrink-0">
+            <div className="h-16 w-16 rounded-full overflow-hidden border border-black/10 shrink-0">
               <img src={data.photo_url} alt={data.full_name} className="h-full w-full object-cover" />
             </div>
           )}
           <div className="flex-1 text-center">
-            <h1 className="text-3xl font-bold uppercase tracking-tight mb-2">{data.full_name}</h1>
-            <div className="text-[11pt] flex flex-wrap justify-center gap-x-3 gap-y-1 text-gray-800 font-sans font-medium">
+            <h1 className="text-[18pt] font-bold uppercase tracking-tight mb-1">{data.full_name}</h1>
+            <div className="text-[10pt] flex flex-wrap justify-center gap-x-2.5 gap-y-0.5 text-gray-800 font-sans font-medium">
               <span>{data.role}</span>
-              <span>|</span>
+              <span>•</span>
               <span>{data.location}</span>
-              <span>|</span>
+              <span>•</span>
               <span>{data.email}</span>
-              <span>|</span>
+              <span>•</span>
               <span>{data.phone}</span>
+              {data.website_url && (
+                <>
+                  <span>•</span>
+                  <span>{data.website_url}</span>
+                </>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Sections */}
-        <div className="space-y-8">
+        {/* Content Sections */}
+        <div className="space-y-4">
           {/* Summary */}
-          <section>
-            <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-3 py-1 tracking-wider font-sans">Professional Summary</h2>
-            <p className="text-[10pt] leading-relaxed text-gray-900">{data.summary}</p>
-          </section>
+          {data.summary && (
+            <section className="mb-3">
+              <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-1.5 py-0.5 tracking-wider font-sans">Professional Summary</h2>
+              <p className="text-[10pt] leading-relaxed text-gray-900">{data.summary}</p>
+            </section>
+          )}
 
-          {/* Experience */}
-          <section>
-            <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-4 py-1 tracking-wider font-sans">Work Experience</h2>
-            <div className="space-y-6">
-              {data.experience?.map((exp: Experience, i: number) => (
-                <div key={i} className="experience-item">
-                  <div className="flex justify-between items-baseline mb-1">
-                    <h3 className="text-[11pt] font-bold">{exp.company}</h3>
-                    <span className="text-[10pt] italic font-sans">{exp.period}</span>
+          {/* Work Experience */}
+          {data.experience && data.experience.length > 0 && (
+            <section className="mb-3">
+              <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-2 py-0.5 tracking-wider font-sans">Work Experience</h2>
+              <div className="space-y-2.5">
+                {data.experience.map((exp: Experience, i: number) => (
+                  <div key={i} className="experience-item">
+                    <div className="flex justify-between items-baseline mb-0.5">
+                      <h3 className="text-[10.5pt] font-bold">{exp.company}</h3>
+                      <span className="text-[10pt] italic font-sans">{exp.period}</span>
+                    </div>
+                    <p className="text-[10pt] font-bold italic mb-1 font-sans text-gray-800">{exp.role}</p>
+                    <ul className="list-disc ml-4 space-y-0.5">
+                      {exp.desc?.map((d: string, j: number) => (
+                        <li key={j} className="text-[10pt] leading-relaxed text-gray-800">{d}</li>
+                      ))}
+                    </ul>
                   </div>
-                  <p className="text-[10pt] font-bold italic mb-2 font-sans">{exp.role}</p>
-                  <ul className="list-disc ml-5 space-y-1.5">
-                    {exp.desc?.map((d: string, j: number) => (
-                      <li key={j} className="text-[10pt] leading-relaxed text-gray-800">{d}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </section>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Projects Duality Split */}
           {(() => {
             const projects = data.featured_projects || [];
             if (projects.length === 0) return null;
 
-            // Group projects by type, providing a fallback for uncategorized items
             const sections = [
               { label: "Freelance Success", type: "Freelance" },
               { label: "Engineering Portfolio", type: "Portfolio" }
@@ -128,9 +137,7 @@ export function PrintResumeClient({ data }: { data: PrintData }) {
 
             return sections.map((section) => {
               const sectionProjects = projects.filter((p: Project) => {
-                // Return projects that match the type exactly
                 if (p.type === section.type) return true;
-                // If a project has no type, default it to Portfolio for now
                 if (!p.type && section.type === 'Portfolio') return true;
                 return false;
               });
@@ -138,16 +145,18 @@ export function PrintResumeClient({ data }: { data: PrintData }) {
               if (sectionProjects.length === 0) return null;
 
               return (
-                <section key={section.type}>
-                  <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-4 py-1 tracking-wider font-sans">{section.label}</h2>
-                  <div className="space-y-4">
+                <section key={section.type} className="mb-3">
+                  <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-2 py-0.5 tracking-wider font-sans">{section.label}</h2>
+                  <div className="space-y-2">
                     {sectionProjects.map((p: Project, i: number) => (
                       <div key={i} className="project-item">
-                        <div className="flex justify-between items-baseline mb-1">
-                          <h3 className="text-[11pt] font-bold">{p.title}</h3>
+                        <div className="flex justify-between items-baseline mb-0.5">
+                          <h3 className="text-[10.5pt] font-bold">{p.title}</h3>
                           <span className="text-[10pt] italic font-sans">{p.category}</span>
                         </div>
-                        <p className="text-[10pt] font-bold italic mb-1 font-sans">Tech Stack: {p.tech_stack?.join(", ") || "Various"}</p>
+                        {p.tech_stack && p.tech_stack.length > 0 && (
+                          <p className="text-[9.5pt] font-bold italic mb-0.5 font-sans text-gray-700">Tech: {p.tech_stack.join(", ")}</p>
+                        )}
                         <p className="text-[10pt] leading-relaxed text-gray-800">{p.description}</p>
                       </div>
                     ))}
@@ -158,32 +167,32 @@ export function PrintResumeClient({ data }: { data: PrintData }) {
           })()}
 
           {/* Skills */}
-          <section>
-            <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-3 py-1 tracking-wider font-sans">Technical Skills</h2>
-            <p className="text-[10pt] leading-relaxed text-gray-900 font-medium">
-              {data.skills?.join(" • ")}
-            </p>
-          </section>
+          {data.skills && data.skills.length > 0 && (
+            <section className="mb-3">
+              <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-1.5 py-0.5 tracking-wider font-sans">Technical Skills</h2>
+              <p className="text-[10pt] leading-relaxed text-gray-900 font-medium">
+                {data.skills.filter(s => s && s.trim() !== "").join(" • ")}
+              </p>
+            </section>
+          )}
 
           {/* Education */}
-          <section>
-            <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-4 py-1 tracking-wider font-sans">Education</h2>
-            <div className="space-y-4">
-              {data.education?.map((edu: Education, i: number) => (
-                <div key={i} className="flex justify-between items-baseline">
-                  <div>
-                    <h3 className="text-[11pt] font-bold">{edu.school}</h3>
-                    <p className="text-[10pt] italic font-sans">{edu.degree}</p>
+          {data.education && data.education.length > 0 && (
+            <section className="mb-3">
+              <h2 className="text-[12pt] font-bold uppercase border-b border-black mb-2 py-0.5 tracking-wider font-sans">Education</h2>
+              <div className="space-y-1.5">
+                {data.education.map((edu: Education, i: number) => (
+                  <div key={i} className="flex justify-between items-baseline">
+                    <div>
+                      <h3 className="text-[10.5pt] font-bold">{edu.school}</h3>
+                      <p className="text-[10pt] italic font-sans">{edu.degree}</p>
+                    </div>
+                    <span className="text-[10pt] font-sans">{edu.period}</span>
                   </div>
-                  <span className="text-[10pt] font-sans">{edu.period}</span>
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
-        
-        <div className="mt-12 pt-8 border-t border-gray-100 text-center no-print text-[8pt] text-gray-400 font-sans">
-          Generated via Portfolio Admin &bull; 2026
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </div>
     </div>

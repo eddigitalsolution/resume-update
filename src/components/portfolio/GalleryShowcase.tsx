@@ -45,18 +45,18 @@ export function GalleryShowcase({ initialItems, isMock }: GalleryShowcaseProps) 
         <motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-4xl mx-auto rounded-[24px] border border-amber-500/20 bg-amber-500/5 p-4 flex flex-col sm:flex-row items-center gap-3 justify-center text-center sm:text-left"
+          className="max-w-3xl mx-auto rounded-2xl border border-amber-500/20 bg-amber-500/10 p-4 flex items-center gap-3 justify-center text-center"
         >
-          <AlertCircle className="text-amber-400 shrink-0" size={18} />
-          <p className="text-xs text-amber-400 font-medium">
-             Showing template showcase assets. To upload, edit, and manage your own, execute the SQL migration script in your Supabase SQL editor and access `/admin/gallery`.
+          <AlertCircle className="text-amber-400 shrink-0" size={16} />
+          <p className="text-xs text-amber-300 font-medium">
+             Displaying curated showcase assets. To manage your own gallery items, execute the database migration and visit `/admin/gallery`.
           </p>
         </motion.div>
       )}
 
-      {/* Modern Glassmorphic Category Filter Menu */}
+      {/* Category Filter Menu with layoutId Active Pill */}
       <div className="flex justify-center">
-        <div className="glass-panel rounded-full p-1.5 flex gap-1 border border-white/5 shadow-2xl">
+        <div className="relative flex p-1.5 bg-zinc-950/80 border border-white/10 rounded-full backdrop-blur-xl shadow-2xl">
           {CATEGORIES.map((cat) => {
             const isActive = activeCategory === cat;
             return (
@@ -64,15 +64,15 @@ export function GalleryShowcase({ initialItems, isMock }: GalleryShowcaseProps) 
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
                 className={cn(
-                  "relative px-6 py-2.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all",
-                  isActive ? "text-black" : "text-gray-400 hover:text-white"
+                  "relative px-6 py-2 rounded-full text-xs font-bold transition-colors z-10",
+                  isActive ? "text-white" : "text-zinc-400 hover:text-white"
                 )}
               >
                 {isActive && (
                   <motion.div
-                    layoutId="activeCategoryHighlight"
-                    className="absolute inset-0 bg-white rounded-full z-[-1]"
-                    transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
+                    layoutId="galleryCategoryPill"
+                    className="absolute inset-0 bg-linear-to-r from-purple-600 to-indigo-600 rounded-full z-[-1] shadow-[0_0_20px_rgba(147,51,234,0.4)]"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
                 {cat}
@@ -85,22 +85,22 @@ export function GalleryShowcase({ initialItems, isMock }: GalleryShowcaseProps) 
       {/* Responsive Gallery Grid */}
       <motion.div 
         layout
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
       >
         <AnimatePresence mode="popLayout">
           {filteredItems.map((item) => (
             <motion.div
               layout
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.4 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3 }}
               key={item.id}
               onClick={() => setActiveLightbox(item)}
-              className="group relative rounded-[32px] overflow-hidden bg-white/5 border border-white/10 hover:border-purple-500/30 transition-all flex flex-col justify-between cursor-pointer"
+              className="group relative rounded-3xl overflow-hidden bg-zinc-950 border border-white/10 hover:border-purple-500/40 transition-all duration-300 flex flex-col justify-between cursor-pointer shadow-2xl hover:shadow-[0_0_35px_rgba(168,85,247,0.15)]"
             >
               {/* Media Container */}
-              <div className="aspect-video bg-zinc-950 overflow-hidden relative border-b border-white/5">
+              <div className="aspect-video bg-zinc-900 overflow-hidden relative border-b border-white/5">
                 {item.image_url ? (
                   <Image 
                     src={item.image_url} 
@@ -110,22 +110,21 @@ export function GalleryShowcase({ initialItems, isMock }: GalleryShowcaseProps) 
                     className="object-cover transition-transform duration-700 group-hover:scale-105" 
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-700"><FolderOpen size={48} /></div>
+                  <div className="w-full h-full flex items-center justify-center text-zinc-800"><FolderOpen size={44} /></div>
                 )}
                 
-                {/* Overlay Ambient Shader */}
-                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-linear-to-t from-zinc-950 via-zinc-950/20 to-transparent opacity-70 group-hover:opacity-85 transition-opacity duration-300" />
                 
-                {/* Hot Zoom indicator on hover */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/30 backdrop-blur-xs">
-                  <div className="h-12 w-12 rounded-full bg-white/15 border border-white/20 flex items-center justify-center text-white scale-90 group-hover:scale-100 transition-all duration-300 shadow-2xl">
-                     <Maximize2 size={18} />
+                {/* Zoom icon on hover */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-xs">
+                  <div className="h-10 w-10 rounded-full bg-white/20 border border-white/30 flex items-center justify-center text-white scale-90 group-hover:scale-100 transition-all duration-300 shadow-2xl">
+                     <Maximize2 size={16} />
                   </div>
                 </div>
 
                 {/* Category Badge */}
                 <span className={cn(
-                  "absolute top-4 left-4 text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow-lg backdrop-blur-md border border-white/10",
+                  "absolute top-3 left-3 text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-lg backdrop-blur-md border border-white/10",
                   item.type === 'AI Image' ? "bg-purple-500/80 text-white" : 
                   item.type === 'Design' ? "bg-blue-500/80 text-white" :
                   "bg-emerald-500/80 text-white"
@@ -135,13 +134,13 @@ export function GalleryShowcase({ initialItems, isMock }: GalleryShowcaseProps) 
               </div>
 
               {/* Description Card Footer */}
-              <div className="p-8 space-y-4">
+              <div className="p-6 space-y-4">
                 <div>
-                  <h3 className="text-xl font-bold text-white tracking-tight group-hover:text-purple-400 transition-colors leading-tight mb-2">
+                  <h3 className="text-lg font-bold text-white tracking-tight group-hover:text-purple-300 transition-colors leading-snug mb-1.5">
                     {item.title}
                   </h3>
                   {item.description && (
-                    <p className="text-sm text-gray-400 leading-relaxed line-clamp-2">{item.description}</p>
+                    <p className="text-xs text-zinc-400 leading-relaxed line-clamp-2">{item.description}</p>
                   )}
                 </div>
 
@@ -149,17 +148,17 @@ export function GalleryShowcase({ initialItems, isMock }: GalleryShowcaseProps) 
                 {item.prompt && (
                   <div 
                     onClick={(e) => handleCopyPrompt(e, item.id, item.prompt || "")}
-                    className="flex items-center justify-between gap-4 p-3 rounded-2xl bg-black/40 border border-white/5 hover:border-white/15 transition-all group/prompt relative active:scale-98"
+                    className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-zinc-900/80 border border-white/5 hover:border-white/15 transition-all group/prompt relative active:scale-98"
                     title="Click to copy prompt"
                   >
-                    <p className="text-[10px] font-mono text-gray-500 group-hover/prompt:text-gray-400 transition-colors line-clamp-2 pr-6 leading-relaxed select-all">
+                    <p className="text-[10px] font-mono text-zinc-500 group-hover/prompt:text-zinc-300 transition-colors line-clamp-1 pr-2 leading-relaxed select-all">
                        {(item.prompt || "").trim()}
                     </p>
-                    <div className="h-7 w-7 rounded-lg bg-zinc-900 flex items-center justify-center text-gray-400 hover:text-white transition-colors border border-white/5 shrink-0">
+                    <div className="h-6 w-6 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white transition-colors border border-white/5 shrink-0">
                       {copiedId === item.id ? (
-                        <Check size={12} className="text-green-400" />
+                        <Check size={11} className="text-emerald-400" />
                       ) : (
-                        <Clipboard size={12} />
+                        <Clipboard size={11} />
                       )}
                     </div>
                   </div>
@@ -174,7 +173,6 @@ export function GalleryShowcase({ initialItems, isMock }: GalleryShowcaseProps) 
       <AnimatePresence>
         {activeLightbox && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
-            {/* Dark blurred background overlay */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -183,22 +181,21 @@ export function GalleryShowcase({ initialItems, isMock }: GalleryShowcaseProps) 
               className="absolute inset-0 bg-black/90 backdrop-blur-md"
             />
 
-            {/* Lightbox Frame */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              initial={{ opacity: 0, scale: 0.94, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-5xl bg-zinc-900 border border-white/10 rounded-[44px] shadow-2xl overflow-hidden z-10 flex flex-col md:flex-row max-h-[90vh] md:h-[600px]"
+              exit={{ opacity: 0, scale: 0.94, y: 16 }}
+              className="relative w-full max-w-5xl bg-zinc-950 border border-white/10 rounded-3xl shadow-2xl overflow-hidden z-10 flex flex-col md:flex-row max-h-[90vh] md:h-145"
             >
               {/* Close Button */}
               <button 
                 onClick={() => setActiveLightbox(null)}
-                className="absolute top-6 right-6 p-2 rounded-full bg-black/40 border border-white/10 text-gray-400 hover:text-white transition-colors z-20"
+                className="absolute top-4 right-4 p-2 rounded-full bg-black/60 border border-white/10 text-zinc-400 hover:text-white transition-colors z-20 backdrop-blur-sm"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
 
-              {/* Left Column: Full Image preview */}
+              {/* Left Column: Image preview */}
               <div className="flex-1 bg-black/60 relative flex items-center justify-center h-64 md:h-full border-r border-white/5">
                 <Image 
                   src={activeLightbox.image_url} 
@@ -209,33 +206,33 @@ export function GalleryShowcase({ initialItems, isMock }: GalleryShowcaseProps) 
                 />
               </div>
 
-              {/* Right Column: Metadata Detail view */}
-              <div className="w-full md:w-[400px] p-8 md:p-12 flex flex-col justify-between overflow-y-auto h-auto md:h-full gap-8 bg-zinc-950">
-                <div className="space-y-6">
+              {/* Right Column: Detail View */}
+              <div className="w-full md:w-95 p-6 md:p-8 flex flex-col justify-between overflow-y-auto h-auto md:h-full gap-6 bg-zinc-950">
+                <div className="space-y-5">
                   <div>
                     <span className={cn(
-                      "text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider border mb-4 inline-block shadow-sm",
+                      "text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider border mb-3 inline-block shadow-sm",
                       activeLightbox.type === 'AI Image' ? "bg-purple-500/10 text-purple-400 border-purple-500/20" : 
                       activeLightbox.type === 'Design' ? "bg-blue-500/10 text-blue-400 border-blue-500/20" :
                       "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                     )}>
                       {activeLightbox.type}
                     </span>
-                    <h2 className="text-2xl font-black text-white leading-tight mb-3">
+                    <h2 className="text-xl font-bold text-white leading-snug mb-2">
                        {activeLightbox.title}
                     </h2>
                     {activeLightbox.description && (
-                      <p className="text-xs text-gray-400 leading-relaxed font-medium">
+                      <p className="text-xs text-zinc-400 leading-relaxed">
                          {activeLightbox.description}
                       </p>
                     )}
                   </div>
 
                   {activeLightbox.prompt && (
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest pl-1">Generation Prompt</label>
-                      <div className="relative rounded-2xl border border-white/10 bg-black/60 p-4 font-mono text-xs text-gray-300 leading-relaxed max-h-40 overflow-y-auto">
-                        <pre className="whitespace-pre-wrap select-all">{(activeLightbox.prompt || "").trim()}</pre>
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest pl-0.5">Generation Prompt</label>
+                      <div className="relative rounded-2xl border border-white/10 bg-zinc-900/80 p-3.5 font-mono text-xs text-zinc-300 leading-relaxed max-h-36 overflow-y-auto">
+                        <pre className="whitespace-pre-wrap select-all font-mono text-[11px]">{(activeLightbox.prompt || "").trim()}</pre>
                       </div>
                     </div>
                   )}
@@ -245,10 +242,10 @@ export function GalleryShowcase({ initialItems, isMock }: GalleryShowcaseProps) 
                   <button 
                     onClick={(e) => handleCopyPrompt(e, activeLightbox.id, activeLightbox.prompt || "")}
                     className={cn(
-                      "w-full h-12 rounded-2xl font-bold text-xs uppercase tracking-widest border transition-all flex items-center justify-center gap-3 active:scale-95",
+                      "w-full h-11 rounded-2xl font-bold text-xs uppercase tracking-wider border transition-all flex items-center justify-center gap-2 active:scale-98",
                       copiedId === activeLightbox.id 
-                         ? "bg-green-500/10 border-green-500/20 text-green-400" 
-                         : "bg-white text-black hover:bg-gray-200 border-transparent shadow-xl shadow-white/5"
+                         ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" 
+                         : "bg-white text-black hover:bg-zinc-200 border-transparent shadow-xl"
                     )}
                   >
                     {copiedId === activeLightbox.id ? (

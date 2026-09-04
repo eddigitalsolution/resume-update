@@ -57,6 +57,7 @@ export interface ResumeData {
   email: string;
   phone: string;
   location: string;
+  website_url?: string;
   summary: string;
   experience: Experience[];
   skills: string[];

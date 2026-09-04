@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { ShieldCheck, Sparkles } from "lucide-react";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -14,9 +15,24 @@ const navItems = [
   { name: "Gallery", href: "/gallery" },
 ];
 
-export function Navbar({ siteName = "Portfolio", logoInitial = "P" }: { siteName?: string, logoInitial?: string }) {
+export function Navbar({
+  siteName = "Portfolio",
+  logoInitial = "P",
+}: {
+  siteName?: string;
+  logoInitial?: string;
+}) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Don't show navbar on admin pages or print route
   if (pathname.startsWith("/admin") || pathname === "/resume/print") {
@@ -24,104 +40,147 @@ export function Navbar({ siteName = "Portfolio", logoInitial = "P" }: { siteName
   }
 
   return (
-    <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl">
-      <div className="glass-panel rounded-full px-6 py-3 flex items-center justify-between shadow-2xl glow-border">
-        <Link href="/" id="nav-logo" className="flex items-center gap-3 group">
-          <div className="h-10 w-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-black text-white shadow-lg group-hover:rotate-6 transition-all duration-500">
-            {logoInitial}
+    <header className="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-5xl transition-all duration-300">
+      <nav
+        className={cn(
+          "relative rounded-full px-3.5 py-2 flex items-center justify-between transition-all duration-500",
+          "bg-zinc-950/80 backdrop-blur-xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8)]",
+          scrolled ? "border-white/15 bg-black/90 shadow-[0_20px_60px_rgba(0,0,0,0.95)]" : ""
+        )}
+      >
+        {/* Brand Logo */}
+        <Link href="/" id="nav-logo" className="flex items-center gap-3 pl-2 group">
+          <div className="relative h-8 w-8 rounded-full bg-linear-to-tr from-indigo-600 via-indigo-500 to-purple-500 p-0.5 shadow-[0_0_15px_rgba(99,102,241,0.4)] group-hover:scale-105 transition-transform duration-300">
+            <div className="h-full w-full rounded-full bg-zinc-950 flex items-center justify-center font-bold text-xs text-white">
+              {logoInitial}
+            </div>
           </div>
-          <span className="text-xl font-black tracking-tighter text-white hidden sm:block uppercase">{siteName}</span>
+          <div className="flex flex-col">
+            <span className="text-xs font-bold tracking-tight text-white group-hover:text-indigo-300 transition-colors">
+              {siteName}
+            </span>
+            <span className="text-[9px] font-semibold text-zinc-400 tracking-wider flex items-center gap-1">
+              Craftsman <span className="h-1 w-1 rounded-full bg-emerald-400 animate-pulse" />
+            </span>
+          </div>
         </Link>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              id={`nav-link-${item.name.toLowerCase()}`}
-              className={cn(
-                "relative px-5 py-2.5 text-[11px] font-black uppercase tracking-widest transition-all hover:text-white",
-                pathname === item.href ? "text-white" : "text-gray-400"
-              )}
-            >
-              {pathname === item.href && (
-                <motion.div
-                  layoutId="navbar-highlight"
-                  className="absolute inset-0 z-[-1] rounded-full bg-white/10"
-                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                />
-              )}
-              {item.name}
-            </Link>
-          ))}
-          <div className="w-px h-4 bg-white/10 mx-4" />
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-1 bg-zinc-900/60 p-1 rounded-full border border-white/5">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                id={`nav-link-${item.name.toLowerCase()}`}
+                className={cn(
+                  "relative px-4 py-1.5 text-xs font-medium transition-all duration-300 rounded-full",
+                  isActive
+                    ? "text-white font-semibold"
+                    : "text-zinc-400 hover:text-zinc-200"
+                )}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="active-nav-pill"
+                    className="absolute inset-0 z-[-1] rounded-full bg-white/10 border border-white/15 shadow-[0_0_12px_rgba(255,255,255,0.05)]"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                {item.name}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Right Admin Link */}
+        <div className="hidden md:flex items-center">
           <Link
             href="/login"
             id="nav-link-admin"
-            className="flex items-center gap-2 rounded-full bg-white px-6 py-2.5 text-[11px] font-black uppercase tracking-widest text-black transition-all hover:bg-gray-200 hover:scale-105 active:scale-95 shadow-xl shadow-white/5"
+            className="group relative px-4 py-1.5 text-xs font-semibold text-zinc-300 hover:text-white rounded-full bg-zinc-900 border border-white/10 hover:border-indigo-500/50 hover:bg-zinc-850 transition-all shadow-md flex items-center gap-2"
           >
-            Admin 
-            <div className="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse" />
+            <ShieldCheck size={13} className="text-indigo-400 group-hover:rotate-12 transition-transform duration-300" />
+            <span>Admin</span>
+            <span className="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse" />
           </Link>
         </div>
 
-        {/* Mobile Menu Button */}
-        <button 
+        {/* Mobile Hamburger Button */}
+        <button
           id="mobile-menu-toggle"
-          className="flex md:hidden p-2 text-gray-400 hover:text-white transition-colors"
+          className="flex md:hidden p-2 rounded-full text-zinc-400 hover:text-white hover:bg-white/5 transition-all"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle menu"
         >
-          <div className="space-y-1.5">
-            <motion.div 
-              animate={isOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
-              className="w-6 h-0.5 bg-current rounded-full" 
+          <div className="w-5 h-4 flex flex-col justify-between items-center relative">
+            <motion.span
+              animate={isOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
+              className="w-5 h-0.5 bg-current rounded-full transition-transform"
             />
-            <motion.div 
+            <motion.span
               animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
-              className="w-6 h-0.5 bg-current rounded-full" 
+              className="w-5 h-0.5 bg-current rounded-full"
             />
-            <motion.div 
-              animate={isOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
-              className="w-6 h-0.5 bg-current rounded-full" 
+            <motion.span
+              animate={isOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
+              className="w-5 h-0.5 bg-current rounded-full transition-transform"
             />
           </div>
         </button>
-      </div>
+      </nav>
 
-      {/* Mobile Menu Overlay */}
-      <motion.div
-        initial={false}
-        animate={isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
-        className="md:hidden overflow-hidden bg-black/90 backdrop-blur-xl border-b border-white/5"
-      >
-        <div className="container mx-auto px-4 py-8 flex flex-col gap-6">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              id={`mobile-nav-link-${item.name.toLowerCase()}`}
-              className={cn(
-                "text-2xl font-bold transition-colors",
-                pathname === item.href ? "text-indigo-400" : "text-gray-500"
-              )}
-              onClick={() => setIsOpen(false)}
-            >
-              {item.name}
-            </Link>
-          ))}
-          <Link
-            href="/login"
-            id="mobile-nav-link-admin"
-            className="text-2xl font-bold text-white mt-4 flex items-center gap-2"
-            onClick={() => setIsOpen(false)}
+      {/* Mobile Drawer Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.96 }}
+            animate={{ opacity: 1, y: 8, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.96 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="md:hidden mt-2 rounded-3xl bg-zinc-950/95 backdrop-blur-2xl border border-white/10 p-5 shadow-2xl overflow-hidden"
           >
-            Admin Access
-            <div className="h-2 w-2 rounded-full bg-indigo-500 animate-pulse" />
-          </Link>
-        </div>
-      </motion.div>
-    </nav>
+            <div className="flex flex-col gap-2">
+              {navItems.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    id={`mobile-nav-link-${item.name.toLowerCase()}`}
+                    className={cn(
+                      "px-4 py-3 rounded-2xl text-sm font-semibold transition-all flex items-center justify-between",
+                      isActive
+                        ? "bg-indigo-500/10 text-indigo-300 border border-indigo-500/20"
+                        : "text-zinc-400 hover:text-white hover:bg-white/5"
+                    )}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <span>{item.name}</span>
+                    {isActive && <Sparkles size={13} className="text-indigo-400" />}
+                  </Link>
+                );
+              })}
+
+              <div className="my-2 border-t border-white/5" />
+
+              <Link
+                href="/login"
+                id="mobile-nav-link-admin"
+                className="px-4 py-3 rounded-2xl text-sm font-semibold text-white bg-zinc-900 border border-white/10 flex items-center justify-between"
+                onClick={() => setIsOpen(false)}
+              >
+                <div className="flex items-center gap-2">
+                  <ShieldCheck size={15} className="text-indigo-400" />
+                  <span>Admin Access</span>
+                </div>
+                <span className="h-2 w-2 rounded-full bg-indigo-500 animate-pulse" />
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
   );
 }

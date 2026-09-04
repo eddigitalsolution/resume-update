@@ -19,7 +19,7 @@ export default function AdminDashboardPage() {
   const [stats, setStats] = useState([
     { name: "Total Projects", value: "0", icon: Briefcase, color: "text-blue-500", bg: "bg-blue-500/10", href: "/admin/projects" },
     { name: "Active Skills", value: "0", icon: Wrench, color: "text-purple-500", bg: "bg-purple-500/10", href: "/admin/skills" },
-    { name: "Resume Updates", value: "1", icon: FileText, color: "text-green-500", bg: "bg-green-500/10", href: "/admin/resume" },
+    { name: "Resume Builder", value: "Ready", icon: FileText, color: "text-green-500", bg: "bg-green-500/10", href: "/admin/resume" },
   ]);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
@@ -38,7 +38,7 @@ export default function AdminDashboardPage() {
         { name: "Active Skills", value: (skillsCount.count || 0).toString(), icon: Wrench, color: "text-purple-500", bg: "bg-purple-500/10", href: "/admin/skills" },
         { name: "Resume Builder", value: "Ready", icon: FileText, color: "text-green-500", bg: "bg-green-500/10", href: "/admin/resume" },
       ]);
-      
+
       setLoading(false);
     }
     fetchStats();
@@ -60,8 +60,8 @@ export default function AdminDashboardPage() {
           <p className="text-gray-400 text-sm">Your portfolio is live and synchronized with the cloud.</p>
         </div>
         <div className="flex gap-4">
-           <Link href="/admin/projects" className="w-full sm:w-auto">
-             <Button className="w-full sm:w-auto rounded-xl bg-white text-black hover:bg-gray-200 font-bold px-6 py-6 sm:py-2">
+           <Link href="/admin/projects">
+             <Button className="rounded-xl bg-white text-black hover:bg-gray-200 font-bold">
                <Plus size={18} className="mr-2" /> New Project
              </Button>
            </Link>
@@ -108,11 +108,11 @@ export default function AdminDashboardPage() {
         </Link>
       </div>
 
-      {/* Recent Activity Section */}
+      {/* Portfolio Overview & Quick Access Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4 md:space-y-6">
           <h2 className="text-xl font-bold text-white px-2">Portfolio Overview</h2>
-          <div className="p-8 rounded-[40px] bg-zinc-900/50 border border-white/10 min-h-[200px] flex items-center justify-center text-gray-500">
+          <div className="p-8 rounded-[40px] bg-zinc-900/50 border border-white/10 min-h-50 flex items-center justify-center text-gray-500">
             <div className="text-center max-w-sm">
               <div className="h-16 w-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-6">
                  <Activity size={32} className="opacity-20" />
@@ -127,7 +127,6 @@ export default function AdminDashboardPage() {
           <div className="p-6 rounded-3xl bg-zinc-900/50 border border-white/10 space-y-3">
              {[
                { name: "Homepage Branding", href: "/admin/branding" },
-               { name: "Key Success Metrics", href: "/admin/metrics" },
                { name: "Update Resume", href: "/admin/resume" },
                { name: "Personal Info", href: "/admin/personal" },
                { name: "Edit Skills", href: "/admin/skills" }

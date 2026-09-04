@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS resume (
   education JSONB DEFAULT '[]',
   stats JSONB DEFAULT '[]',
   photo_url TEXT,
+  website_url TEXT,
   homepage_config JSONB DEFAULT '{}'::JSONB,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

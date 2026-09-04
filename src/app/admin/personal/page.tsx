@@ -12,7 +12,7 @@ import {
   Loader2,
   FileText,
   UserCircle,
-  Camera
+  Globe
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase-browser";
@@ -25,6 +25,7 @@ interface PersonalData {
   email: string;
   phone: string;
   location: string;
+  website_url?: string;
   summary: string;
   photo_url: string;
   whatsapp_personal?: string;
@@ -54,6 +55,7 @@ export default function PersonalAdminPage() {
           email: resume.email || "",
           phone: resume.phone || "",
           location: resume.location || "",
+          website_url: resume.website_url || "",
           summary: resume.summary || "",
           photo_url: resume.photo_url || "",
           whatsapp_personal: resume.whatsapp_personal || "",
@@ -95,7 +97,7 @@ export default function PersonalAdminPage() {
     <div className="max-w-4xl mx-auto space-y-10">
       <div>
         <h1 className="text-3xl font-bold text-white mb-2">Personal Profile</h1>
-        <p className="text-gray-400 text-sm">Update your public identity and professional summary.</p>
+        <p className="text-gray-400 text-sm">Update your public identity, website URL, and professional summary.</p>
       </div>
 
       <form onSubmit={handleSave} className="space-y-8">
@@ -120,70 +122,85 @@ export default function PersonalAdminPage() {
             </div>
 
             <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">Full Name</label>
-              <div className="relative group">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600 group-focus-within:text-indigo-500 transition-colors" />
-                <input 
-                  required
-                  value={data?.full_name || ""}
-                  onChange={(e) => setData(prev => ({ ...prev!, full_name: e.target.value }))}
-                  className="w-full bg-black/50 border border-white/10 rounded-2xl py-3 pl-12 pr-4 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all font-medium"
-                />
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">Full Name</label>
+                <div className="relative group">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600 group-focus-within:text-indigo-500 transition-colors" />
+                  <input 
+                    required
+                    value={data?.full_name || ""}
+                    onChange={(e) => setData(prev => ({ ...prev!, full_name: e.target.value }))}
+                    className="w-full bg-black/50 border border-white/10 rounded-2xl py-3 pl-12 pr-4 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all font-medium"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">Professional Role</label>
-              <div className="relative group">
-                <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600 group-focus-within:text-indigo-500 transition-colors" />
-                <input 
-                  required
-                  value={data?.role || ""}
-                  onChange={(e) => setData(prev => ({ ...prev!, role: e.target.value }))}
-                  className="w-full bg-black/50 border border-white/10 rounded-2xl py-3 pl-12 pr-4 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all font-medium"
-                />
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">Professional Role</label>
+                <div className="relative group">
+                  <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600 group-focus-within:text-indigo-500 transition-colors" />
+                  <input 
+                    required
+                    value={data?.role || ""}
+                    onChange={(e) => setData(prev => ({ ...prev!, role: e.target.value }))}
+                    className="w-full bg-black/50 border border-white/10 rounded-2xl py-3 pl-12 pr-4 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all font-medium"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">Email Address</label>
-              <div className="relative group">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600 group-focus-within:text-indigo-500 transition-colors" />
-                <input 
-                  required
-                  type="email"
-                  value={data?.email || ""}
-                  onChange={(e) => setData(prev => ({ ...prev!, email: e.target.value }))}
-                  className="w-full bg-black/50 border border-white/10 rounded-2xl py-3 pl-12 pr-4 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all font-medium"
-                />
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">Email Address</label>
+                <div className="relative group">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600 group-focus-within:text-indigo-500 transition-colors" />
+                  <input 
+                    required
+                    type="email"
+                    value={data?.email || ""}
+                    onChange={(e) => setData(prev => ({ ...prev!, email: e.target.value }))}
+                    className="w-full bg-black/50 border border-white/10 rounded-2xl py-3 pl-12 pr-4 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all font-medium"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">Phone Number</label>
-              <div className="relative group">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600 group-focus-within:text-indigo-500 transition-colors" />
-                <input 
-                  required
-                  value={data?.phone || ""}
-                  onChange={(e) => setData(prev => ({ ...prev!, phone: e.target.value }))}
-                  className="w-full bg-black/50 border border-white/10 rounded-2xl py-3 pl-12 pr-4 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all font-medium"
-                />
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">Phone Number</label>
+                <div className="relative group">
+                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600 group-focus-within:text-indigo-500 transition-colors" />
+                  <input 
+                    required
+                    value={data?.phone || ""}
+                    onChange={(e) => setData(prev => ({ ...prev!, phone: e.target.value }))}
+                    className="w-full bg-black/50 border border-white/10 rounded-2xl py-3 pl-12 pr-4 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all font-medium"
+                  />
+                </div>
               </div>
-            </div>
-            <div className="md:col-span-2 space-y-2">
-              <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">Location / Address</label>
-              <div className="relative group">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600 group-focus-within:text-indigo-500 transition-colors" />
-                <input 
-                  required
-                  value={data?.location || ""}
-                  onChange={(e) => setData(prev => ({ ...prev!, location: e.target.value }))}
-                  className="w-full bg-black/50 border border-white/10 rounded-2xl py-3 pl-12 pr-4 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all font-medium"
-                />
+
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">Location / Address</label>
+                <div className="relative group">
+                  <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600 group-focus-within:text-indigo-500 transition-colors" />
+                  <input 
+                    required
+                    value={data?.location || ""}
+                    onChange={(e) => setData(prev => ({ ...prev!, location: e.target.value }))}
+                    className="w-full bg-black/50 border border-white/10 rounded-2xl py-3 pl-12 pr-4 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all font-medium"
+                  />
+                </div>
               </div>
-            </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">Website URL / Portfolio Link</label>
+                <div className="relative group">
+                  <Globe className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600 group-focus-within:text-indigo-500 transition-colors" />
+                  <input 
+                    placeholder="https://yourdomain.com"
+                    value={data?.website_url || ""}
+                    onChange={(e) => setData(prev => ({ ...prev!, website_url: e.target.value }))}
+                    className="w-full bg-black/50 border border-white/10 rounded-2xl py-3 pl-12 pr-4 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all font-medium"
+                  />
+                </div>
+              </div>
+
               <div className="md:col-span-2 space-y-2">
                 <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">WhatsApp Personal (International Format)</label>
                 <div className="relative group">

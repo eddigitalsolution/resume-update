@@ -29,7 +29,6 @@ const adminNavItems = [
   { name: "Overview", href: "/admin/dashboard", icon: LayoutDashboard },
   { name: "Personal", href: "/admin/personal", icon: UserCircle },
   { name: "Branding", href: "/admin/branding", icon: Zap },
-  { name: "Metrics", href: "/admin/metrics", icon: BarChart3 },
   { name: "Projects", href: "/admin/projects?type=Freelance", icon: Briefcase },
   { name: "Portfolio", href: "/admin/projects?type=Portfolio", icon: FolderKanban },
   { name: "Skills", href: "/admin/skills", icon: Wrench },

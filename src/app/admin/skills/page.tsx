@@ -243,6 +243,8 @@ export default function SkillsAdminPage() {
                     >
                       <option className="bg-zinc-900" value="Frontend">Frontend</option>
                       <option className="bg-zinc-900" value="Backend">Backend</option>
+                      <option className="bg-zinc-900" value="Internal System">Internal System</option>
+                      <option className="bg-zinc-900" value="Web App">Web App</option>
                       <option className="bg-zinc-900" value="Mobile">Mobile</option>
                       <option className="bg-zinc-900" value="Database">Database</option>
                       <option className="bg-zinc-900" value="Design">Design</option>

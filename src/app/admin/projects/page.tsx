@@ -333,26 +333,29 @@ export default function AdminProjectsPage() {
                          onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                          className="w-full bg-black/50 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all font-medium appearance-none" 
                        >
-                          {focusMode === 'Freelance' ? (
-                            <>
-                              <option value="Full-stack Job">Full-stack Job</option>
-                              <option value="UI/UX Contract">UI/UX Contract</option>
-                              <option value="Consulting">Consulting</option>
-                              <option value="System Audit">System Audit</option>
-                              <option value="Maintenance">Maintenance</option>
-                              <option value="Marketing">Marketing</option>
-                              <option value="E-commerce">E-commerce</option>
-                              <option value="Automation">Automation</option>
-                            </>
-                          ) : (
-                            <>
-                              <option value="Web App">Web App</option>
-                              <option value="Internal System">Internal System</option>
-                              <option value="AI Tool">AI Tool</option>
-                              <option value="Creative Coding">Creative Coding</option>
-                              <option value="Mobile App">Mobile App</option>
-                            </>
-                          )}
+                          <option value="Internal System">Internal System</option>
+                          <option value="Web App">Web App</option>
+                          <option value="Frontend">Frontend</option>
+                          <option value="Backend">Backend</option>
+                          <option value="Mobile">Mobile</option>
+                          <option value="Database">Database</option>
+                          <option value="Design">Design</option>
+                          <option value="Tools">Tools</option>
+                          <option value="Payment">Payment</option>
+                          <option value="Development">Development</option>
+                          <option value="Creative">Creative</option>
+                          <option value="Server">Server</option>
+                          <option value="Marketing">Marketing</option>
+                          <option value="Data Analysis">Data Analysis</option>
+                          <option value="AI Tool">AI Tool</option>
+                          <option value="Automation">Automation</option>
+                          <option value="E-commerce">E-commerce</option>
+                          <option value="UI/UX Contract">UI/UX Contract</option>
+                          <option value="Full-stack Job">Full-stack Job</option>
+                          <option value="Consulting">Consulting</option>
+                          <option value="System Audit">System Audit</option>
+                          <option value="Maintenance">Maintenance</option>
+                          <option value="Creative Coding">Creative Coding</option>
                        </select>
                     </div>
 

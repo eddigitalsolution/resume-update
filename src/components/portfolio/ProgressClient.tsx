@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Terminal, Clock, GitCommit, ChevronRight } from "lucide-react";
+import { Terminal, GitCommit, ChevronRight, MessageSquareCode, Layers, Sparkles } from "lucide-react";
 import type { Project, Update } from "@/types";
 
 export function ProgressClient({ 
@@ -18,24 +18,37 @@ export function ProgressClient({
   contactOptions?: Array<{ label: string; message: string; }>
 }) {
   const defaultOptions = [
-    { label: "Create Website", message: "Hi! I'm interested in building a new website with you." },
-    { label: "Need Help Run Ads", message: "Hi! I need expert help with running and optimizing my digital ads." },
-    { label: "Need AI Automation", message: "Hi! I'm looking to implement AI automation in my business." },
-    { label: "Business Consultation", message: "Hi! I'd like to book a consultation to discuss a project." }
+    { label: "Create Website / Web App", message: "Hi! I'm interested in building a new custom web app or website with you." },
+    { label: "AI & Automation Solution", message: "Hi! I'm looking to implement custom AI automation for my business." },
+    { label: "Digital Ads & Growth", message: "Hi! I need expert help with optimizing my digital campaign ads and growth." },
+    { label: "Consultation & Tech Audit", message: "Hi! I'd like to book a direct consultation to discuss a technical project." }
   ];
 
   const displayOptions = contactOptions && contactOptions.length > 0 ? contactOptions : defaultOptions;
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+      {/* Left Column: Direct Consultation Panel */}
       <div className="space-y-8">
-        <div className="p-8 rounded-4xl bg-white/5 border border-white/10">
-          <h3 className="text-xl font-bold text-white mb-2">Want specialized help?</h3>
-          <p className="text-gray-400 text-sm mb-8">Direct line for high-priority projects and consultation.</p>
+        <div className="p-8 rounded-3xl bg-zinc-950 border border-white/10 shadow-2xl relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-indigo-500/20 transition-all" />
+
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center gap-1.5">
+              <MessageSquareCode size={12} /> Direct Channel
+            </span>
+          </div>
+
+          <h3 className="text-xl font-bold text-white mb-2">Build or Collaborate</h3>
+          <p className="text-zinc-400 text-xs leading-relaxed mb-6">
+            Direct priority channel for custom web development, AI automation, and high-impact technical advisory.
+          </p>
           
           <div className="space-y-6">
-            <div className="space-y-3">
-              <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest pl-1">What can I help you with?</p>
+            <div className="space-y-2.5">
+              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest block pl-1">
+                Select Consultation Topic
+              </span>
               <div className="grid grid-cols-1 gap-2">
                 {displayOptions.map((item, i) => (
                   <a
@@ -43,10 +56,10 @@ export function ProgressClient({
                     id={`quick-ask-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
                     href={whatsappBusiness ? `https://wa.me/${whatsappBusiness.replace(/\D/g, '').replace(/^0/, '60').replace(/^(?!60)/, '60')}?text=${encodeURIComponent(item.message)}` : '#'}
                     target="_blank"
-                    className={`flex items-center justify-between p-3 rounded-xl border border-white/5 bg-white/2 hover:bg-white/5 hover:border-white/10 transition-all group ${!whatsappBusiness && 'opacity-50 cursor-not-allowed'}`}
+                    className={`flex items-center justify-between p-3.5 rounded-2xl border border-white/5 bg-zinc-900/60 hover:bg-zinc-900 hover:border-indigo-500/40 transition-all group ${!whatsappBusiness && 'opacity-50 cursor-not-allowed'}`}
                   >
-                    <span className="text-xs font-bold text-gray-300 group-hover:text-white">{item.label}</span>
-                    <ChevronRight size={14} className="text-gray-600 group-hover:text-indigo-400 transition-transform group-hover:translate-x-1" />
+                    <span className="text-xs font-semibold text-zinc-300 group-hover:text-white transition-colors">{item.label}</span>
+                    <ChevronRight size={14} className="text-zinc-600 group-hover:text-indigo-400 transition-transform group-hover:translate-x-1" />
                   </a>
                 ))}
               </div>
@@ -54,62 +67,66 @@ export function ProgressClient({
 
             {whatsappBusiness ? (
               <a 
-                href={`https://wa.me/${whatsappBusiness.replace(/\D/g, '').replace(/^0/, '60').replace(/^(?!60)/, '60')}`} 
+                href={`https://wa.me/${whatsappBusiness.replace(/\D/g, '').replace(/^0/, '60')}`} 
                 target="_blank" 
-                className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 px-6 rounded-2xl transition-all shadow-lg shadow-indigo-500/10"
+                className="w-full flex items-center justify-center gap-2 bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs uppercase tracking-wider py-3.5 px-6 rounded-2xl transition-all shadow-xl shadow-indigo-500/20 active:scale-98"
               >
-                General Inquiry
+                Initiate Direct Inquiry <Sparkles size={13} />
               </a>
             ) : (
-              <button disabled className="w-full flex items-center justify-center gap-2 bg-white/10 text-gray-500 font-bold py-4 px-6 rounded-2xl">
-                Contact Unavailable
+              <button disabled className="w-full flex items-center justify-center gap-2 bg-zinc-900 text-zinc-600 font-bold text-xs uppercase tracking-wider py-3.5 px-6 rounded-2xl border border-white/5 cursor-not-allowed">
+                Contact Currently Offline
               </button>
             )}
           </div>
         </div>
       </div>
-      <div className="lg:col-span-2 space-y-12">
+
+      {/* Right Column: Stats, Active Projects & Logs */}
+      <div className="lg:col-span-2 space-y-10">
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {stats.map((stat, i) => (
-            <div key={i} className="p-6 rounded-2xl bg-white/5 border border-white/10 text-center">
-              <span className="block text-2xl font-bold text-white mb-1">{stat.value}</span>
-              <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">{stat.label}</span>
+            <div key={i} className="p-5 rounded-3xl bg-zinc-950 border border-white/10 text-center shadow-xl hover:border-white/20 transition-all">
+              <span className="block text-2xl font-black text-white mb-1 tracking-tight">{stat.value}</span>
+              <span className="text-[9px] uppercase tracking-widest text-zinc-400 font-bold">{stat.label}</span>
             </div>
           ))}
         </div>
 
-        {/* Active Projects */}
-        <section>
-          <div className="flex items-center gap-2 mb-8">
-            <Terminal size={20} className="text-indigo-500" />
-            <h2 className="text-2xl font-bold text-white">Active Projects</h2>
+        {/* Active Projects Section */}
+        <section className="space-y-6">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+              <Terminal size={18} />
+            </div>
+            <h2 className="text-xl font-bold text-white tracking-tight">Active Builds & Pipelines</h2>
           </div>
 
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {initialProjects.map((project) => (
-              <div key={project.id} className="p-6 rounded-3xl bg-white/5 border border-white/10">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-lg font-bold text-white">{project.title}</h3>
-                    <p className="text-sm text-gray-500">{project.category}</p>
+              <div key={project.id} className="p-6 rounded-3xl bg-zinc-950 border border-white/10 hover:border-indigo-500/40 transition-all shadow-xl flex flex-col justify-between space-y-4">
+                <div>
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-base font-bold text-white line-clamp-1">{project.title}</h3>
+                    <span className="text-[9px] font-bold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-0.5 rounded-full uppercase tracking-wider shrink-0 ml-2">
+                      {project.status}
+                    </span>
                   </div>
-                  <span className="text-xs font-bold text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded-full uppercase tracking-wider">
-                    {project.status}
-                  </span>
+                  <p className="text-xs text-zinc-400 line-clamp-2">{project.description}</p>
                 </div>
                 
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs mb-1">
-                    <span className="text-gray-400">Progress</span>
-                    <span className="text-white font-bold">{project.progress}%</span>
+                <div className="space-y-2 pt-2 border-t border-white/5">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-zinc-500 text-[10px] uppercase font-bold tracking-wider">Completion Status</span>
+                    <span className="text-white font-mono font-bold text-xs">{project.progress}%</span>
                   </div>
-                  <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-zinc-900 rounded-full p-0.5 border border-white/5 overflow-hidden">
                     <motion.div 
                       initial={{ width: 0 }}
                       animate={{ width: `${project.progress}%` }}
                       transition={{ duration: 1, ease: "easeOut" }}
-                      className="h-full bg-linear-to-r from-indigo-500 to-purple-600"
+                      className="h-full bg-linear-to-r from-indigo-500 to-purple-500 rounded-full"
                     />
                   </div>
                 </div>
@@ -118,39 +135,38 @@ export function ProgressClient({
           </div>
         </section>
 
-        {/* Development Logs */}
-        <section>
-          <div className="flex items-center gap-2 mb-8">
-            <GitCommit size={20} className="text-purple-500" />
-            <h2 className="text-2xl font-bold text-white">Development Logs</h2>
+        {/* Development Logs Timeline */}
+        <section className="space-y-6">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400">
+              <GitCommit size={18} />
+            </div>
+            <h2 className="text-xl font-bold text-white tracking-tight">Recent Development Logs</h2>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {recentUpdates.map((update, i) => (
-              <div key={i} className="flex gap-4 group">
-                <div className="flex flex-col items-center">
-                  <div className="p-1 rounded-full bg-indigo-500/20 group-hover:bg-indigo-500/40 transition-colors">
-                    <div className="h-2 w-2 rounded-full bg-indigo-500" />
-                  </div>
-                  <div className="flex-1 w-px bg-white/10 my-2" />
+              <div key={i} className="p-5 rounded-2xl bg-zinc-950 border border-white/10 hover:border-purple-500/30 transition-all shadow-md flex gap-4">
+                <div className="flex flex-col items-center pt-1">
+                  <div className="h-2.5 w-2.5 rounded-full bg-purple-500 animate-pulse shadow-[0_0_10px_rgba(168,85,247,0.8)]" />
+                  {i !== recentUpdates.length - 1 && <div className="w-px h-full bg-white/10 mt-2" />}
                 </div>
-                <div className="flex-1 pb-8">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-bold text-gray-500">
-                      {new Date(update.created_at).toLocaleDateString()}
+                <div className="flex-1 space-y-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-[10px] font-mono font-bold text-zinc-500">
+                      {new Date(update.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                     </span>
-                    <span className="text-xs font-bold text-indigo-400">
-                      in {update.projects?.title || 'Unknown Project'}
+                    <span className="text-[10px] font-bold text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20">
+                      {update.projects?.title || 'System Core'}
                     </span>
                   </div>
-                  <p className="text-gray-300">{update.note}</p>
+                  <p className="text-xs text-zinc-300 leading-relaxed">{update.note}</p>
                 </div>
               </div>
             ))}
           </div>
         </section>
       </div>
-
     </div>
   );
 }
