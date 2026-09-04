@@ -83,8 +83,8 @@ export default async function GalleryPage() {
   return (
     <main className="min-h-screen pt-32 pb-24 bg-black relative overflow-hidden">
       {/* Dynamic ambient backdrop light */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-purple-500/10 blur-[150px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-[400px] h-[400px] bg-indigo-500/10 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-125 h-125 bg-purple-500/10 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-100 h-100 bg-indigo-500/10 blur-[150px] rounded-full pointer-events-none" />
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         {/* Header Section */}
