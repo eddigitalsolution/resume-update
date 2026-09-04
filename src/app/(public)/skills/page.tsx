@@ -3,7 +3,7 @@ import { SkillsClient } from "@/components/portfolio/SkillsClient";
 import type { Skill, SkillCategory } from "@/types";
 import { Cpu } from "lucide-react";
 
-export const revalidate = 0;
+export const revalidate = 60;
 
 export default async function SkillsPage() {
   const supabase = await createClient();

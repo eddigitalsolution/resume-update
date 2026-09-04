@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase-server";
 import { HomeContent } from "@/components/portfolio/HomeContent";
 
-export const revalidate = 0; // Disable cache for real-time-ish updates
+export const revalidate = 60; // 60 seconds ISR cache for instant responses
 
 export default async function Home() {
   const supabase = await createClient();

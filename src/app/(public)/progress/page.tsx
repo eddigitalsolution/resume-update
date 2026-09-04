@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase-server";
 import { ProgressClient } from "@/components/portfolio/ProgressClient";
 import { Activity } from "lucide-react";
 
-export const revalidate = 0;
+export const revalidate = 60;
 
 export default async function ProgressPage() {
   const supabase = await createClient();

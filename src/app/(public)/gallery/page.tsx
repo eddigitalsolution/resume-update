@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase-server";
 import { GalleryItem } from "@/types";
 import { GalleryShowcase } from "@/components/portfolio/GalleryShowcase";
 
-export const revalidate = 0; // Disable cache for real-time updates
+export const revalidate = 60;
 
 export default async function GalleryPage() {
   let items: GalleryItem[] = [];

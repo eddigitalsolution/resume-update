@@ -4,7 +4,7 @@ import { Sparkles } from "lucide-react";
 import { Suspense } from "react";
 import type { Skill } from "@/types";
 
-export const revalidate = 0;
+export const revalidate = 60;
 
 export default async function PortfolioPage() {
   const supabase = await createClient();
