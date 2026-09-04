@@ -128,6 +128,7 @@ export default function AdminLayout({
                   <Link
                     key={item.href}
                     href={item.href}
+                    prefetch={true}
                     className={cn(
                       "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group relative",
                       isActive 
@@ -151,6 +152,7 @@ export default function AdminLayout({
             <div className="pt-4 border-t border-white/5 space-y-1">
               <Link
                 href="/"
+                prefetch={true}
                 className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 whitespace-nowrap"
               >
                 <Home size={18} />
