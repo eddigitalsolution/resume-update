@@ -6,12 +6,13 @@ export const revalidate = 60; // 60 seconds ISR cache for instant responses
 export default async function Home() {
   const supabase = await createClient();
 
-  // Fetch projects and sort by featured status
+  // Fetch projects (only featured ones for homepage spotlight)
   const { data: allFreelance } = await supabase
     .from("projects")
     .select("*")
     .in("status", ["Live", "Past Job"])
     .eq("type", "Freelance")
+    .eq("is_featured", true)
     .order("created_at", { ascending: false });
 
   const { data: allPortfolio } = await supabase
@@ -19,15 +20,11 @@ export default async function Home() {
     .select("*")
     .in("status", ["Live", "Past Job"])
     .eq("type", "Portfolio")
+    .eq("is_featured", true)
     .order("created_at", { ascending: false });
 
-  const freelanceProjects = (allFreelance || [])
-    .sort((a, b) => (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0))
-    .slice(0, 9);
-
-  const portfolioProjects = (allPortfolio || [])
-    .sort((a, b) => (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0))
-    .slice(0, 9);
+  const freelanceProjects = (allFreelance || []).slice(0, 9);
+  const portfolioProjects = (allPortfolio || []).slice(0, 9);
 
   // Fetch all skills
   const { data: skills } = await supabase
