@@ -114,7 +114,6 @@ export function ProjectSlider({
                       src={project.image_url}
                       alt={project.title}
                       fill
-                      priority={isCenter}
                       sizes="(max-width: 640px) 100vw, 1000px"
                       className="object-contain object-top transition-all duration-300 pointer-events-none drop-shadow-2xl"
                     />

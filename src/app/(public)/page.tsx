@@ -23,11 +23,11 @@ export default async function Home() {
 
   const freelanceProjects = (allFreelance || [])
     .sort((a, b) => (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0))
-    .slice(0, 6);
+    .slice(0, 9);
 
   const portfolioProjects = (allPortfolio || [])
     .sort((a, b) => (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0))
-    .slice(0, 6);
+    .slice(0, 9);
 
   // Fetch all skills
   const { data: skills } = await supabase

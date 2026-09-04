@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShieldCheck, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -109,18 +109,7 @@ export function Navbar({
           })}
         </div>
 
-        {/* Right Admin Link */}
-        <div className="hidden md:flex items-center">
-          <Link
-            href="/login"
-            id="nav-link-admin"
-            className="group relative px-4 py-1.5 text-xs font-semibold text-zinc-300 hover:text-white rounded-full bg-zinc-900 border border-white/10 hover:border-indigo-500/50 hover:bg-zinc-850 transition-all shadow-md flex items-center gap-2"
-          >
-            <ShieldCheck size={13} className="text-indigo-400 group-hover:rotate-12 transition-transform duration-300" />
-            <span>Admin</span>
-            <span className="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse" />
-          </Link>
-        </div>
+
 
         {/* Mobile Hamburger Button */}
         <button
@@ -179,20 +168,7 @@ export function Navbar({
                 );
               })}
 
-              <div className="my-2 border-t border-white/5" />
 
-              <Link
-                href="/login"
-                id="mobile-nav-link-admin"
-                className="px-4 py-3 rounded-2xl text-sm font-semibold text-white bg-zinc-900 border border-white/10 flex items-center justify-between"
-                onClick={() => setIsOpen(false)}
-              >
-                <div className="flex items-center gap-2">
-                  <ShieldCheck size={15} className="text-indigo-400" />
-                  <span>Admin Access</span>
-                </div>
-                <span className="h-2 w-2 rounded-full bg-indigo-500 animate-pulse" />
-              </Link>
             </div>
           </motion.div>
         )}

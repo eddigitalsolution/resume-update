@@ -31,7 +31,6 @@ export function ProjectShowcaseModal({ project, onClose }: ProjectShowcaseModalP
                 src={project.image_url}
                 alt={project.title}
                 fill
-                priority
                 className="object-cover"
               />
             </div>
@@ -62,7 +61,6 @@ export function ProjectShowcaseModal({ project, onClose }: ProjectShowcaseModalP
                 src={project.image_url}
                 alt={project.title}
                 fill
-                priority
                 sizes="(max-width: 1024px) 100vw, 60vw"
                 className="object-contain object-center p-2"
               />

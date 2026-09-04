@@ -202,7 +202,6 @@ export function GalleryShowcase({ initialItems, isMock }: GalleryShowcaseProps) 
                   alt={activeLightbox.title}
                   fill
                   className="object-contain" 
-                  priority
                 />
               </div>
 
