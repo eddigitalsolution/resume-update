@@ -200,8 +200,7 @@ export function ScrollSequence() {
   return (
     <div
       ref={containerRef}
-      className="relative w-full bg-black select-none"
-      style={{ height: "400vh" }}
+      className="relative w-full bg-black select-none h-[150vh] md:h-[240vh]"
     >
       {/* SVG Convolution Sharpen Filter Definition */}
       <svg className="absolute w-0 h-0 pointer-events-none" xmlns="http://www.w3.org/2000/svg">

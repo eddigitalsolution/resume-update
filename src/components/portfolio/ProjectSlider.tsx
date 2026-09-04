@@ -1,11 +1,12 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Code2, ArrowUpRight, Sparkles } from "lucide-react";
 import Image from "next/image";
 import { Project } from "@/types";
 import { ProjectShowcaseModal } from "./ProjectShowcaseModal";
+import { cn } from "@/lib/utils";
 
 interface ProjectSliderProps {
   projects: Project[];
@@ -22,16 +23,12 @@ export function ProjectSlider({
   subtitle,
   badge,
 }: ProjectSliderProps) {
-  const sliderRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  const scroll = (direction: "left" | "right") => {
-    if (!sliderRef.current) return;
-    const scrollAmount = direction === "left" ? -400 : 400;
-    sliderRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-  };
-
   if (!projects || projects.length === 0) return null;
+
+  const currentProject = projects[activeIndex] || projects[0];
 
   return (
     <div className="space-y-8">
@@ -40,7 +37,7 @@ export function ProjectSlider({
         <div>
           {badge && (
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20">
+              <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
                 {badge}
               </span>
             </div>
@@ -57,146 +54,111 @@ export function ProjectSlider({
           )}
         </div>
 
-        {/* Arrow Controls */}
+        {/* Carousel Prev/Next Buttons */}
         <div className="flex items-center gap-3 shrink-0">
           <button
-            onClick={() => scroll("left")}
+            onClick={() => setActiveIndex((prev) => (prev > 0 ? prev - 1 : projects.length - 1))}
             aria-label="Previous Project"
-            className="p-3.5 rounded-full bg-zinc-900 border border-white/10 text-zinc-400 hover:text-white hover:border-white/30 hover:bg-zinc-800 transition-all shadow-lg active:scale-95"
+            className="p-3.5 rounded-full bg-zinc-900/80 border border-white/15 text-zinc-300 hover:text-white hover:border-amber-400/50 hover:bg-zinc-800 transition-all shadow-lg backdrop-blur-md active:scale-95"
           >
             <ChevronLeft size={20} />
           </button>
           <button
-            onClick={() => scroll("right")}
+            onClick={() => setActiveIndex((prev) => (prev < projects.length - 1 ? prev + 1 : 0))}
             aria-label="Next Project"
-            className="p-3.5 rounded-full bg-zinc-900 border border-white/10 text-zinc-400 hover:text-white hover:border-white/30 hover:bg-zinc-800 transition-all shadow-lg active:scale-95"
+            className="p-3.5 rounded-full bg-zinc-900/80 border border-white/15 text-zinc-300 hover:text-white hover:border-amber-400/50 hover:bg-zinc-800 transition-all shadow-lg backdrop-blur-md active:scale-95"
           >
             <ChevronRight size={20} />
           </button>
         </div>
       </div>
 
-      {/* Slider Track Wrapper */}
-      <div className="relative">
-        {/* Left & Right Edge Fades */}
-        <div
-          className="absolute left-0 top-0 bottom-0 w-16 pointer-events-none z-10"
-          style={{ background: "linear-gradient(to right, rgb(0,0,0) 0%, transparent 100%)" }}
-        />
-        <div
-          className="absolute right-0 top-0 bottom-0 w-16 pointer-events-none z-10"
-          style={{ background: "linear-gradient(to left, rgb(0,0,0) 0%, transparent 100%)" }}
-        />
+      {/* ── Floating Overlapping Cards Stage ── */}
+      <div className="relative w-full h-96 sm:h-145 lg:h-180 flex items-center justify-center overflow-hidden">
+        {projects.map((project, idx) => {
+            const offset = idx - activeIndex;
+            const absOffset = Math.abs(offset);
+            const isCenter = offset === 0;
 
-        {/* Horizontal Scroll Container */}
-        <div
-          ref={sliderRef}
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            gap: "1.5rem",
-            overflowX: "scroll",
-            overflowY: "visible",
-            paddingTop: "1.5rem",
-            paddingBottom: "1.5rem",
-            paddingLeft: "0.5rem",
-            paddingRight: "0.5rem",
-            scrollBehavior: "smooth",
-            scrollbarWidth: "none",      /* Firefox */
-            msOverflowStyle: "none",     /* IE/Edge */
-          }}
-        >
-          {projects.map((project, idx) => (
-            <motion.div
-              key={project.id}
-              onClick={() => setSelectedProject(project)}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.45, delay: idx * 0.07 }}
-              whileHover={{ y: -10, scale: 1.03 }}
-              style={{
-                minWidth: "320px",
-                width: "360px",
-                flexShrink: 0,
-                scrollSnapAlign: "start",
-                cursor: "pointer",
-                perspective: "800px",
-              }}
-              className="group relative rounded-3xl overflow-hidden bg-zinc-950 border border-white/10 hover:border-indigo-500/50 transition-colors duration-300 shadow-2xl hover:shadow-[0_0_40px_rgba(99,102,241,0.18)] flex flex-col justify-between"
-            >
-              {/* Media Area */}
-              <div className="relative overflow-hidden bg-zinc-900" style={{ aspectRatio: "16/9" }}>
-                {project.image_url ? (
-                  <Image
-                    src={project.image_url}
-                    alt={project.title}
-                    fill
-                    priority={idx < 2}
-                    sizes="360px"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-zinc-800 bg-zinc-950">
-                    <Code2 size={40} />
-                  </div>
+            // Only render up to 2 items to the left & right for visual clarity
+            if (absOffset > 2) return null;
+
+            return (
+              <motion.div
+                key={project.id}
+                initial={false}
+                animate={{
+                  x: offset * 220,
+                  y: isCenter ? 0 : absOffset * 18,
+                  scale: isCenter ? 1 : 0.82 - absOffset * 0.08,
+                  zIndex: 30 - absOffset * 10,
+                  rotate: offset * 3,
+                  opacity: 1 - absOffset * 0.3,
+                }}
+                transition={{ type: "spring", stiffness: 260, damping: 26 }}
+                onClick={() => {
+                  if (isCenter) {
+                    setSelectedProject(project);
+                  } else {
+                    setActiveIndex(idx);
+                  }
+                }}
+                className={cn(
+                  "absolute w-[92vw] max-w-[92vw] sm:w-160 lg:w-225 h-72 sm:h-135 overflow-hidden cursor-pointer select-none transition-all duration-300 group flex items-center justify-center"
                 )}
-                <div
-                  className="absolute inset-0"
-                  style={{ background: "linear-gradient(to top, rgb(9,9,11) 0%, rgba(9,9,11,0.15) 60%, transparent 100%)", opacity: 0.85 }}
-                />
-
-                {/* Category Label */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider bg-black/70 text-zinc-300 border border-white/10 backdrop-blur-sm">
-                    {project.category}
-                  </span>
+              >
+                {/* Pure Floating Image without container or frame */}
+                <div className="relative w-full h-full">
+                  {project.image_url ? (
+                    <Image
+                      src={project.image_url}
+                      alt={project.title}
+                      fill
+                      priority={isCenter}
+                      sizes="(max-width: 640px) 100vw, 1000px"
+                      className="object-contain object-top transition-all duration-300 pointer-events-none drop-shadow-2xl"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-zinc-700">
+                      <Code2 size={48} />
+                    </div>
+                  )}
                 </div>
-
-                {/* Expand Arrow */}
-                <div className="absolute top-3 right-3 z-10 p-2 rounded-full bg-black/60 border border-white/10 text-white opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
-                  <ArrowUpRight size={13} />
-                </div>
-              </div>
-
-              {/* Card Content */}
-              <div className="p-5 flex-1 flex flex-col justify-between gap-3">
-                <div>
-                  <h3 className="text-lg font-bold text-white mb-1.5 group-hover:text-indigo-300 transition-colors truncate">
-                    {project.title}
-                  </h3>
-                  <p className="text-xs text-zinc-400 leading-relaxed line-clamp-2">
-                    {project.description}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between gap-2 pt-3 border-t border-white/5">
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.tech_stack?.slice(0, 3).map((tech) => (
-                      <span
-                        key={tech}
-                        className="text-[9px] font-bold uppercase tracking-wider text-zinc-500 bg-zinc-900 px-2 py-0.5 rounded border border-white/5"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  <span className="text-[10px] font-bold text-indigo-400 flex items-center gap-1 shrink-0 group-hover:translate-x-0.5 transition-transform whitespace-nowrap">
-                    Showcase <Sparkles size={10} />
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Hide WebKit scrollbar via inline style trick */}
-        <style>{`
-          div::-webkit-scrollbar { display: none; }
-        `}</style>
+              </motion.div>
+            );
+          })}
       </div>
 
-      {/* Showcase Modal */}
+      {/* Dedicated Unblocked Floating CTA Button & Slide Indicators */}
+      <div className="mt-4 flex flex-col items-center justify-center gap-4 z-30 relative">
+        {currentProject && (
+          <button
+            onClick={() => setSelectedProject(currentProject)}
+            className="px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-black text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-2xl shadow-amber-500/40 active:scale-95 border border-amber-300/40"
+          >
+            EXPLORE DETAILS <Sparkles size={14} />
+          </button>
+        )}
+
+        {/* Slide Indicator Dots */}
+        <div className="flex items-center gap-2">
+          {projects.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveIndex(i)}
+              className={cn(
+                "h-1.5 rounded-full transition-all duration-300",
+                i === activeIndex
+                  ? "w-8 bg-amber-400"
+                  : "w-2 bg-zinc-700 hover:bg-zinc-500"
+              )}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Full Screen Showcase Modal */}
       <ProjectShowcaseModal
         project={selectedProject}
         onClose={() => setSelectedProject(null)}

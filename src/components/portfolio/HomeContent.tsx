@@ -75,32 +75,11 @@ export function HomeContent({
         );
       }
     });
-
-    // Special animation for skills bubble cloud
-    const skillBubbles = containerRef.current?.querySelectorAll(".skill-bubble");
-    if (skillBubbles && skillBubbles.length > 0) {
-      gsap.fromTo(
-        skillBubbles,
-        { opacity: 0, scale: 0.8, y: 20 },
-        {
-          opacity: 1,
-          scale: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.03,
-          scrollTrigger: {
-            trigger: ".skills-section",
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-    }
   }, { scope: containerRef });
 
   return (
-    <div ref={containerRef} className="flex flex-col gap-32 pb-32">
-      <div className="flex flex-col gap-12">
+    <div ref={containerRef} className="flex flex-col gap-6 md:gap-12 pb-12">
+      <div className="flex flex-col gap-0">
         <Hero profile={profile} />
         <ScrollSequence />
       </div>
@@ -118,7 +97,7 @@ export function HomeContent({
       </section>
 
       {/* Portfolio Innovations Section */}
-      <section className="scroll-section container mx-auto px-4 lg:px-8">
+      <section className="scroll-section container mx-auto px-4 lg:px-8 max-w-full overflow-x-hidden">
         <ProjectSlider
           badge={config.portfolio_label || "Engineering & AI"}
           title={config.portfolio_title || "Portfolio Innovations"}
@@ -127,36 +106,6 @@ export function HomeContent({
           viewAllHref="/portfolio?type=Portfolio"
           viewAllLabel="Technical Lab"
         />
-      </section>
-
-      {/* Skills Section Preview */}
-      <section className="skills-section container mx-auto px-4 lg:px-8">
-        <div className="rounded-3xl border border-zinc-800 bg-zinc-950/50 p-12 lg:p-16 relative overflow-hidden text-center">
-          <div className="max-w-4xl mx-auto relative z-10">
-            <div className="flex flex-col items-center mb-12">
-              <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-4">
-                {config.skills_title || "Technical Expertise"}
-              </h2>
-              <p className="text-zinc-400 max-w-xl text-sm md:text-base">
-                {config.skills_description || "A snapshot of the core technologies and modern frameworks I use to bring complex ideas to life."}
-              </p>
-            </div>
-
-            <div className="flex flex-wrap justify-center gap-3">
-              {skills?.map((skill) => (
-                <div
-                  key={skill.id}
-                  className="skill-bubble opacity-0 px-6 py-3 rounded-full bg-zinc-900 border border-zinc-800 hover:border-zinc-700 hover:bg-zinc-900/80 transition-all cursor-default group flex items-center gap-3"
-                >
-                  <div className="h-1.5 w-1.5 rounded-full bg-zinc-500" />
-                  <span className="text-sm font-bold text-zinc-200 group-hover:text-white transition-colors">
-                    {skill.name}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
       </section>
     </div>
   );
