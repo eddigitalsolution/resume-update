@@ -36,20 +36,23 @@ export function HomeContent({
     
     sections.forEach((section: any) => {
       // Fade in section title and header
-      gsap.fromTo(
-        section.querySelector(".section-header"),
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: section,
-            start: "top 85%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
+      const header = section.querySelector(".section-header");
+      if (header) {
+        gsap.fromTo(
+          header,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            scrollTrigger: {
+              trigger: section,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      }
 
       // Stagger reveal card elements
       const cards = section.querySelectorAll(".project-card");
@@ -74,22 +77,25 @@ export function HomeContent({
     });
 
     // Special animation for skills bubble cloud
-    gsap.fromTo(
-      ".skill-bubble",
-      { opacity: 0, scale: 0.8, y: 20 },
-      {
-        opacity: 1,
-        scale: 1,
-        y: 0,
-        duration: 0.6,
-        stagger: 0.03,
-        scrollTrigger: {
-          trigger: ".skills-section",
-          start: "top 80%",
-          toggleActions: "play none none none",
-        },
-      }
-    );
+    const skillBubbles = containerRef.current?.querySelectorAll(".skill-bubble");
+    if (skillBubbles && skillBubbles.length > 0) {
+      gsap.fromTo(
+        skillBubbles,
+        { opacity: 0, scale: 0.8, y: 20 },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.03,
+          scrollTrigger: {
+            trigger: ".skills-section",
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    }
   }, { scope: containerRef });
 
   return (

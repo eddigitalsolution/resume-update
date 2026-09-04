@@ -177,12 +177,18 @@ export function ScrollSequence() {
       },
     });
 
-    titleTimeline
-      .to(".seq-title-1", { opacity: 0, y: -40, duration: 1 })
-      .to(".seq-title-2", { opacity: 1, y: 0, duration: 1 })
-      .to(".seq-title-2", { opacity: 0, y: -40, duration: 1 }, "+=0.5")
-      .to(".seq-title-3", { opacity: 1, y: 0, duration: 1 })
-      .to(".seq-title-3", { opacity: 0, y: -40, duration: 1 }, "+=0.5");
+    const title1 = containerRef.current?.querySelector(".seq-title-1");
+    const title2 = containerRef.current?.querySelector(".seq-title-2");
+    const title3 = containerRef.current?.querySelector(".seq-title-3");
+
+    if (title1 && title2 && title3) {
+      titleTimeline
+        .to(title1, { opacity: 0, y: -40, duration: 1 })
+        .to(title2, { opacity: 1, y: 0, duration: 1 })
+        .to(title2, { opacity: 0, y: -40, duration: 1 }, "+=0.5")
+        .to(title3, { opacity: 1, y: 0, duration: 1 })
+        .to(title3, { opacity: 0, y: -40, duration: 1 }, "+=0.5");
+    }
 
     return () => {
       window.removeEventListener("resize", handleResize);
