@@ -15,6 +15,7 @@ interface ProjectSliderProps {
   badge?: string;
   viewAllHref?: string;
   viewAllLabel?: string;
+  theme?: "dark" | "light";
 }
 
 export function ProjectSlider({
@@ -22,6 +23,7 @@ export function ProjectSlider({
   title,
   subtitle,
   badge,
+  theme = "dark",
 }: ProjectSliderProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -29,6 +31,7 @@ export function ProjectSlider({
   if (!projects || projects.length === 0) return null;
 
   const currentProject = projects[activeIndex] || projects[0];
+  const isLight = theme === "light";
 
   return (
     <div className="space-y-8">
@@ -37,18 +40,35 @@ export function ProjectSlider({
         <div>
           {badge && (
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
+              <span
+                className={cn(
+                  "text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border",
+                  isLight
+                    ? "text-amber-600 bg-amber-500/15 border-amber-500/30"
+                    : "text-amber-400 bg-amber-500/10 border-amber-500/20"
+                )}
+              >
                 {badge}
               </span>
             </div>
           )}
           {title && (
-            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-2">
+            <h2
+              className={cn(
+                "text-3xl md:text-5xl font-black tracking-tight mb-2",
+                isLight ? "text-zinc-900" : "text-white"
+              )}
+            >
               {title}
             </h2>
           )}
           {subtitle && (
-            <p className="text-zinc-400 max-w-xl text-sm md:text-base">
+            <p
+              className={cn(
+                "max-w-xl text-sm md:text-base",
+                isLight ? "text-zinc-600 font-medium" : "text-zinc-400"
+              )}
+            >
               {subtitle}
             </p>
           )}
@@ -59,14 +79,24 @@ export function ProjectSlider({
           <button
             onClick={() => setActiveIndex((prev) => (prev > 0 ? prev - 1 : projects.length - 1))}
             aria-label="Previous Project"
-            className="p-3.5 rounded-full bg-zinc-900/80 border border-white/15 text-zinc-300 hover:text-white hover:border-amber-400/50 hover:bg-zinc-800 transition-all shadow-lg backdrop-blur-md active:scale-95"
+            className={cn(
+              "p-3.5 rounded-full border transition-all shadow-lg backdrop-blur-md active:scale-95",
+              isLight
+                ? "bg-white/90 border-zinc-200 text-zinc-700 hover:text-black hover:bg-white hover:border-amber-500"
+                : "bg-zinc-900/80 border-white/15 text-zinc-300 hover:text-white hover:border-amber-400/50 hover:bg-zinc-800"
+            )}
           >
             <ChevronLeft size={20} />
           </button>
           <button
             onClick={() => setActiveIndex((prev) => (prev < projects.length - 1 ? prev + 1 : 0))}
             aria-label="Next Project"
-            className="p-3.5 rounded-full bg-zinc-900/80 border border-white/15 text-zinc-300 hover:text-white hover:border-amber-400/50 hover:bg-zinc-800 transition-all shadow-lg backdrop-blur-md active:scale-95"
+            className={cn(
+              "p-3.5 rounded-full border transition-all shadow-lg backdrop-blur-md active:scale-95",
+              isLight
+                ? "bg-white/90 border-zinc-200 text-zinc-700 hover:text-black hover:bg-white hover:border-amber-500"
+                : "bg-zinc-900/80 border-white/15 text-zinc-300 hover:text-white hover:border-amber-400/50 hover:bg-zinc-800"
+            )}
           >
             <ChevronRight size={20} />
           </button>
@@ -148,7 +178,11 @@ export function ProjectSlider({
               className={cn(
                 "h-1.5 rounded-full transition-all duration-300",
                 i === activeIndex
-                  ? "w-8 bg-amber-400"
+                  ? isLight
+                    ? "w-8 bg-amber-500"
+                    : "w-8 bg-amber-400"
+                  : isLight
+                  ? "w-2 bg-zinc-300 hover:bg-zinc-400"
                   : "w-2 bg-zinc-700 hover:bg-zinc-500"
               )}
               aria-label={`Go to slide ${i + 1}`}
