@@ -85,7 +85,7 @@ export function HomeContent({
       </div>
 
       {/* Freelance Projects Section */}
-      <section className="scroll-section container mx-auto px-4 lg:px-8 max-w-full overflow-x-hidden">
+      <section className="scroll-section w-full px-6 md:px-12 lg:px-20 overflow-x-hidden">
         <ProjectSlider
           badge={config.freelance_label || "Client Success"}
           title={config.freelance_title || "Freelance Evolution"}
@@ -97,7 +97,7 @@ export function HomeContent({
       </section>
 
       {/* Portfolio Innovations Section */}
-      <section className="scroll-section container mx-auto px-4 lg:px-8 max-w-full overflow-x-hidden">
+      <section className="scroll-section w-full px-6 md:px-12 lg:px-20 overflow-x-hidden">
         <ProjectSlider
           badge={config.portfolio_label || "Engineering & AI"}
           title={config.portfolio_title || "Portfolio Innovations"}
