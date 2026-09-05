@@ -85,7 +85,7 @@ export function HomeContent({
       </div>
 
       {/* Freelance Projects Section */}
-      <section className="scroll-section container mx-auto px-4 lg:px-8">
+      <section className="scroll-section container mx-auto px-4 lg:px-8 max-w-full overflow-x-hidden">
         <ProjectSlider
           badge={config.freelance_label || "Client Success"}
           title={config.freelance_title || "Freelance Evolution"}
