@@ -215,72 +215,21 @@ export function ProjectSlider({
               }}
               className="absolute w-[88vw] max-w-[88vw] sm:w-160 lg:w-225 h-72 sm:h-125 lg:h-145 cursor-pointer rounded-3xl overflow-hidden group"
             >
-              {/* Card Container Panel with Subtle Glass Shadow */}
-              <div
-                className={cn(
-                  "relative w-full h-full rounded-3xl border shadow-[0_30px_90px_rgba(0,0,0,0.8)] overflow-hidden transition-colors duration-500 backdrop-blur-xl flex flex-col justify-between p-4 sm:p-6",
-                  isCenter
-                    ? "border-amber-500/40 bg-zinc-950/90 hover:border-amber-400/80 shadow-[0_30px_100px_rgba(245,158,11,0.2)]"
-                    : "border-white/10 bg-zinc-950/70 hover:border-white/30"
+              {/* Pure Floating Image without container or frame */}
+              <div className="relative w-full h-full">
+                {project.image_url ? (
+                  <Image
+                    src={project.image_url}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, 1000px"
+                    className="object-contain object-top transition-all duration-300 pointer-events-none drop-shadow-2xl"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-zinc-700">
+                    <Code2 size={56} />
+                  </div>
                 )}
-              >
-                {/* Floating Media Visual Stage */}
-                <div className="relative w-full h-full overflow-hidden rounded-2xl bg-zinc-900/60">
-                  {project.image_url ? (
-                    <Image
-                      src={project.image_url}
-                      alt={project.title}
-                      fill
-                      sizes="(max-width: 640px) 100vw, 1000px"
-                      className="object-contain object-top transition-transform duration-700 group-hover:scale-[1.03]"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center text-zinc-700 bg-zinc-950 p-6">
-                      <Code2 size={56} className="mb-2 opacity-40 text-amber-400" />
-                      <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500">
-                        SHOWCASE VISUAL
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Gradient Depth Overlay */}
-                  <div className="absolute inset-0 bg-linear-to-t from-zinc-950 via-zinc-950/20 to-transparent opacity-80" />
-
-                  {/* Top Badges overlay */}
-                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none z-10">
-                    {project.category ? (
-                      <span className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-black/75 text-amber-300 border border-amber-500/30 backdrop-blur-md">
-                        {project.category}
-                      </span>
-                    ) : (
-                      <div />
-                    )}
-
-                    {project.is_featured && (
-                      <span className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-amber-500/20 text-amber-400 border border-amber-400/40 backdrop-blur-md flex items-center gap-1.5">
-                        <Sparkles size={11} /> SPOTLIGHT
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Bottom Info Bar inside Card */}
-                  <div className="absolute bottom-4 left-4 right-4 z-10 flex items-end justify-between pointer-events-none">
-                    <div className="max-w-[80%] space-y-1">
-                      <h3 className="text-lg sm:text-2xl font-black text-white tracking-tight drop-shadow-md">
-                        {project.title}
-                      </h3>
-                      {project.description && (
-                        <p className="text-xs text-zinc-300 line-clamp-1 font-medium">
-                          {project.description}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="p-2.5 rounded-full bg-amber-500 text-black shadow-lg transform group-hover:scale-110 transition-transform">
-                      <ArrowUpRight size={18} />
-                    </div>
-                  </div>
-                </div>
               </div>
             </motion.div>
           );
