@@ -86,34 +86,26 @@ export function HomeContent({
 
       {/* Freelance Projects Section */}
       <section className="scroll-section container mx-auto px-4 lg:px-8 max-w-full overflow-x-hidden">
-        <div className="relative rounded-3xl bg-linear-to-br from-zinc-100 via-white to-zinc-200 border border-zinc-300/60 p-6 sm:p-10 shadow-[0_25px_60px_rgba(0,0,0,0.4)] overflow-hidden">
-          <div className="absolute -top-24 -left-24 w-96 h-96 bg-amber-400/25 rounded-full blur-3xl pointer-events-none" />
-          <ProjectSlider
-            badge={config.freelance_label || "Client Success"}
-            title={config.freelance_title || "Freelance Evolution"}
-            subtitle={config.freelance_description || "Impactful solutions delivered for businesses and clients across marketing, SEO, and system audits."}
-            projects={freelanceProjects}
-            viewAllHref="/portfolio?type=Freelance"
-            viewAllLabel="All Client Projects"
-            theme="light"
-          />
-        </div>
+        <ProjectSlider
+          badge={config.freelance_label || "Client Success"}
+          title={config.freelance_title || "Freelance Evolution"}
+          subtitle={config.freelance_description || "Impactful solutions delivered for businesses and clients across marketing, SEO, and system audits."}
+          projects={freelanceProjects}
+          viewAllHref="/portfolio?type=Freelance"
+          viewAllLabel="All Client Projects"
+        />
       </section>
 
       {/* Portfolio Innovations Section */}
       <section className="scroll-section container mx-auto px-4 lg:px-8 max-w-full overflow-x-hidden">
-        <div className="relative rounded-3xl bg-linear-to-br from-zinc-100 via-white to-zinc-200 border border-zinc-300/60 p-6 sm:p-10 shadow-[0_25px_60px_rgba(0,0,0,0.4)] overflow-hidden">
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
-          <ProjectSlider
-            badge={config.portfolio_label || "Engineering & AI"}
-            title={config.portfolio_title || "Portfolio Innovations"}
-            subtitle={config.portfolio_description || "Technical deep-dives into application architecture, AI creative experiments, and internal systems."}
-            projects={portfolioProjects}
-            viewAllHref="/portfolio?type=Portfolio"
-            viewAllLabel="Technical Lab"
-            theme="light"
-          />
-        </div>
+        <ProjectSlider
+          badge={config.portfolio_label || "Engineering & AI"}
+          title={config.portfolio_title || "Portfolio Innovations"}
+          subtitle={config.portfolio_description || "Technical deep-dives into application architecture, AI creative experiments, and internal systems."}
+          projects={portfolioProjects}
+          viewAllHref="/portfolio?type=Portfolio"
+          viewAllLabel="Technical Lab"
+        />
       </section>
     </div>
   );
